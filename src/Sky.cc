@@ -34,7 +34,7 @@ void Sky::initialize()
 
 void Sky::handleMessage(cMessage *msg)
 {
-    if(msg->isSelfMessage() && count_s <= 2) {
+    if(msg->isSelfMessage()) {
         EV << "Wait period is over, sending plane\n";
 
         msg_creation(count_s);

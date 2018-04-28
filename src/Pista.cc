@@ -45,7 +45,8 @@ void Pista::handleMessage(cMessage *msg)
         }
         free_strip = true;
     }
-    else if((strcmp(msg->getName(), "REQ_LAND") == 0) || (strcmp(msg->getName(), "REQ_TAKEOFF") == 0)) {
+    //else if((strcmp(msg->getName(), "REQ_LAND") == 0) || (strcmp(msg->getName(), "REQ_TAKEOFF") == 0)) {
+    else if(strcmp(msg->getName(), "REQ") == 0) {
         if(free_strip) {
             cMessage *tmp_msg = new cMessage("Free");
             send(tmp_msg, "out_tower");
