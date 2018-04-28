@@ -32,7 +32,7 @@ void Landing::initialize()
    plane = nullptr;
    notify = nullptr;
    beep = nullptr;
-   timerl = par("procTime");
+   //timerl = par("procTime");
 }
 
 void Landing::handleMessage(cMessage *msg)

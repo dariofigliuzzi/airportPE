@@ -23,7 +23,7 @@ simple Landing
 {
     parameters:
         bool sendInitialMessage = default(false);
-        double procTime @unit(s) = default(3s);
+        //double procTime @unit(s) = default(3s);
     gates:
         input in_sky;
         input in_tower;

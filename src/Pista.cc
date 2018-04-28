@@ -11,7 +11,7 @@
 // 
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
+// PORCODDIO
 
 #include "Pista.h"
 #include "Plane_m.h"
@@ -36,11 +36,11 @@ void Pista::handleMessage(cMessage *msg)
 {
     if(msg->isSelfMessage()) {
         if(strcmp(msg->getName(), "beep_land") == 0) {
-            EV << "LANDED: " << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+            EV << "LANDED: " << "Plane - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
             send(myMsg, "out_parking");
         }
         else {
-            EV << "TAKED-OFF: " << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+            EV << "TAKED-OFF: " << "Plane - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
             myMsg = nullptr;
         }
         free_strip = true;
@@ -49,7 +49,7 @@ void Pista::handleMessage(cMessage *msg)
         if(free_strip) {
             cMessage *tmp_msg = new cMessage("Free");
             send(tmp_msg, "out_tower");
-            //EV << msg->getSenderModule()->getFullName() <<"\n";
+
         }
     }
     else if(strcmp(msg->getSenderModule()->getFullName(), "takeoff") == 0) {
@@ -64,6 +64,7 @@ void Pista::handleMessage(cMessage *msg)
 
     }
     else {
+        //EV << "Nome del modulo: " << msg->getSenderModule()->getFullName() << "\n";
         free_strip = false;
         EV << "--->Landing\n";
         myMsg = check_and_cast<Plane*>(msg);

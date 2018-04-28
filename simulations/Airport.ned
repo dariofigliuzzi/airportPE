@@ -35,7 +35,7 @@ network Airport
             @display("p=49,182");
         }
         sky: Sky {
-            procTime = 5s;
+            //procTime = 5s;
             @display("p=88,328");
         }
         parking: Parking {
