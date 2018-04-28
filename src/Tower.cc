@@ -19,9 +19,9 @@ namespace airport {
 
 Define_Module(Tower);
 
-cMessage *temp_msg_land;
-cMessage *temp_msg_takeoff;
-cMessage *req;
+cMessage *temp_msg_land;    //per invio OK a Landing
+cMessage *temp_msg_takeoff; //per invio OK a Takeoff
+cMessage *req;              //per invio richiesta disponibilità pista a Pista
 bool free;
 
 void Tower::initialize()
@@ -34,28 +34,14 @@ void Tower::initialize()
 
 void Tower::handleMessage(cMessage *msg)
 {
+   //Gestione messaggio "Free" da Pista
    if(strcmp(msg->getName(), "Free") == 0){
        free = true;
-      /* EV << "Sending OK to landing_queue\n";
-       temp_msg = new cMessage("OK");
-       send(temp_msg, "out_land");*/
    }
-   else if(strcmp(msg->getName(), "newplane_land") == 0 || strcmp(msg->getName(), "newplane_takeoff") == 0){
-      /* if(free) {
-           free = false;
-           //EV << "Sending OK to landing_queue\n";
-           EV << "Sending OK to queues\n";
 
-           temp_msg_land = new cMessage("OK");
-           send(temp_msg_land, "out_land");
-           temp_msg_takeoff = new cMessage("OK");
-           send(temp_msg_takeoff, "out_takeoff");
-       }
-       else {
-           //temp_msg = new cMessage("REQ_LAND");
-           req = new cMessage("REQ");
-           send(req, "out_pista");
-       }*/
+   //Gestione richieste dalle code di landing e takeoff
+   else if(strcmp(msg->getName(), "newplane_land") == 0 || strcmp(msg->getName(), "newplane_takeoff") == 0){
+
        req = new cMessage("REQ");
        send(req, "out_pista");
        if(free){
@@ -72,19 +58,6 @@ void Tower::handleMessage(cMessage *msg)
            }
        }
    }
-  /* else if(strcmp(msg->getName(), "newplane_takeoff") == 0){
-       if(free) {
-           free= false;
-           EV << "Sending OK to takeoff_queue\n";
-           temp_msg = new cMessage("OK");
-           send(temp_msg, "out_takeoff");
-       }
-       else {
-           temp_msg = new cMessage("REQ_TAKEOFF");
-           send(temp_msg, "out_pista");
-       }
-   }*/
-
 }
 
 }; // namespace

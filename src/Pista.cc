@@ -15,15 +15,14 @@
 
 #include "Pista.h"
 #include "Plane_m.h"
-//#include "Takeoff.h"
 
 namespace airport {
 
 Define_Module(Pista);
 
-bool free_strip;
+bool free_strip; //true se pista è libera
 simtime_t timerp;
-Plane* myMsg;
+Plane* myMsg;    //Plane* in cui memorizzare le info aereo proveniente da Takeoff
 
 void Pista::initialize()
 {
@@ -45,7 +44,8 @@ void Pista::handleMessage(cMessage *msg)
         }
         free_strip = true;
     }
-    //else if((strcmp(msg->getName(), "REQ_LAND") == 0) || (strcmp(msg->getName(), "REQ_TAKEOFF") == 0)) {
+
+    //Gestione messaggio di richiesta da Tower
     else if(strcmp(msg->getName(), "REQ") == 0) {
         if(free_strip) {
             cMessage *tmp_msg = new cMessage("Free");
@@ -53,23 +53,28 @@ void Pista::handleMessage(cMessage *msg)
 
         }
     }
+
+    //Gestione messaggio con info aereo da Takeoff
     else if(strcmp(msg->getSenderModule()->getFullName(), "takeoff") == 0) {
         free_strip = false;
         EV << "<---Taking-off\n";
         myMsg = check_and_cast<Plane*>(msg);
-        //start timer per decollo
+
+        //Start timer per decollo
         cancelAndDelete(beep);
         beep = new cMessage("beep_takeoff");
         timerp = par("procTime3");
         scheduleAt(simTime() + timerp, beep);
 
     }
+
+    //Gestione messaggio con info aereo da Landing
     else {
-        //EV << "Nome del modulo: " << msg->getSenderModule()->getFullName() << "\n";
         free_strip = false;
         EV << "--->Landing\n";
         myMsg = check_and_cast<Plane*>(msg);
-        //start timer per atterraggio
+
+        //Start timer per atterraggio
         cancelAndDelete(beep);
         beep = new cMessage("beep_land");
         timerp = par("procTime2");

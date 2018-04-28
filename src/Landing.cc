@@ -32,11 +32,11 @@ void Landing::initialize()
    plane = nullptr;
    notify = nullptr;
    beep = nullptr;
-   //timerl = par("procTime");
 }
 
 void Landing::handleMessage(cMessage *msg)
 {
+    //Gestione messaggio OK proveniente dalla Tower
     if(strcmp(msg->getName(), "OK") == 0) {
         if(!landing_queue.isEmpty()) {
             EV << "Start Landing\n";
@@ -49,6 +49,8 @@ void Landing::handleMessage(cMessage *msg)
         else
             EV<< "The landing_queue is empty\n";
     }
+
+    //Gestione dei messaggi Plane*
     else {
         EV << "Adding plane on landing_queue\n";
         Plane *myMsg;

@@ -25,9 +25,9 @@ int count_s;
 
 void Sky::initialize()
 {
-    count_s = 0;
-    beep = new cMessage("beep");
-    plane =nullptr;
+    count_s = 0;                    //contatore aerei
+    beep = new cMessage("beep");    //per creazione periodica aerei
+    plane =nullptr;                 //cMessage con info su aereo
     timer = par("procTime");
     scheduleAt(simTime() + timer, beep);
 }
@@ -47,6 +47,7 @@ void Sky::handleMessage(cMessage *msg)
     }
 }
 
+/*creazione del messaggio con info aereo*/
 void Sky::msg_creation(int n) {
 
     plane = new Plane(nullptr);

@@ -21,7 +21,6 @@ Define_Module(Takeoff);
 
 cQueue takeoff_queue("takeoff_queue");
 int count_to;
-//simtime_t timerto;
 
 
 void Takeoff::initialize()
@@ -30,11 +29,11 @@ void Takeoff::initialize()
     plane = nullptr;
     notify = nullptr;
     beep = nullptr;
-    //timerto = par("procTime");
 }
 
 void Takeoff::handleMessage(cMessage *msg)
 {
+    //Gestione messaggio OK proveniente da Tower
     if(strcmp(msg->getName(), "OK") == 0) {
         if(!takeoff_queue.isEmpty()) {
              EV << "Start Take-off\n";
@@ -47,6 +46,8 @@ void Takeoff::handleMessage(cMessage *msg)
          else
              EV<< "The takeoff_queue is empty\n";
         }
+
+    //Gestione messaggio con info aereo da Parking
      else {
          EV << "Adding plane on takeoff_queue\n";
          Plane *myMsg;

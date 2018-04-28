@@ -43,6 +43,8 @@ void Parking::handleMessage(cMessage *msg)
         else
            EV<< "The parking_queue is empty\n";
     }
+
+    //Gestione messaggio con info aereo da Pista
     else {
         EV << "Adding plane on parking_queue\n";
         Plane *myMsg;
@@ -57,7 +59,7 @@ void Parking::handleMessage(cMessage *msg)
                   EV << count_pk++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
         }
 
-        //attivazione timer per tempo parcheggio
+        //Start timer per tempo parcheggio
         cancelAndDelete(beep);
         beep = new cMessage("beep");
         scheduleAt(simTime()+timerpk, beep);
