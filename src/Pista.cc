@@ -15,6 +15,7 @@
 
 #include "Pista.h"
 #include "Plane_m.h"
+//#include "Takeoff.h"
 
 namespace airport {
 
@@ -22,12 +23,11 @@ Define_Module(Pista);
 
 bool free_strip;
 simtime_t timerp;
+Plane* myMsg;
 
 void Pista::initialize()
 {
-    beep = new cMessage("beep");
-    timerp = par("procTime");
-    scheduleAt(simTime() + timerp, beep);
+    beep = nullptr;
     free_strip = true;
 
 }
@@ -35,23 +35,43 @@ void Pista::initialize()
 void Pista::handleMessage(cMessage *msg)
 {
     if(msg->isSelfMessage()) {
-        cMessage *tmp_msg = new cMessage("Free");
-
+        if(strcmp(msg->getName(), "beep_land") == 0) {
+            EV << "LANDED: " << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+            send(myMsg, "out_parking");
+        }
+        else {
+            EV << "TAKED-OFF: " << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+            myMsg = nullptr;
+        }
+        free_strip = true;
+    }
+    else if((strcmp(msg->getName(), "REQ_LAND") == 0) || (strcmp(msg->getName(), "REQ_TAKEOFF") == 0)) {
         if(free_strip) {
-             send(tmp_msg, "out_tower");
-             //free_strip = false; // disabilitato per testing
-
-             cancelAndDelete(beep);
-             beep = new cMessage("beep");
-             scheduleAt(simTime()+timerp, beep);
+            cMessage *tmp_msg = new cMessage("Free");
+            send(tmp_msg, "out_tower");
+            //EV << msg->getSenderModule()->getFullName() <<"\n";
         }
     }
-    else {
-        EV << "--->Landing\n";
-        Plane *myMsg;
+    else if(strcmp(msg->getSenderModule()->getFullName(), "takeoff") == 0) {
+        free_strip = false;
+        EV << "<---Taking-off\n";
         myMsg = check_and_cast<Plane*>(msg);
-        EV << "LANDED: " << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
-        send(myMsg, "out_parking");
+        //start timer per decollo
+        cancelAndDelete(beep);
+        beep = new cMessage("beep_takeoff");
+        timerp = par("procTime3");
+        scheduleAt(simTime() + timerp, beep);
+
+    }
+    else {
+        free_strip = false;
+        EV << "--->Landing\n";
+        myMsg = check_and_cast<Plane*>(msg);
+        //start timer per atterraggio
+        cancelAndDelete(beep);
+        beep = new cMessage("beep_land");
+        timerp = par("procTime2");
+        scheduleAt(simTime() + timerp, beep);
     }
 }
 

@@ -20,24 +20,46 @@ namespace airport {
 Define_Module(Tower);
 
 cMessage *temp_msg;
+bool free;
 
 void Tower::initialize()
 {
     temp_msg = nullptr;
+    free = true;
 }
 
 void Tower::handleMessage(cMessage *msg)
 {
    if(strcmp(msg->getName(), "Free") == 0){
-       EV << "Sending OK to landing_queue\n";
+       free = true;
+      /* EV << "Sending OK to landing_queue\n";
        temp_msg = new cMessage("OK");
-       send(temp_msg, "out_land");
+       send(temp_msg, "out_land");*/
    }
-  /* if(strcmp(msg->getName(), "newplane") == 0){
-          EV << "Sending OK to landing_queue\n";
-          temp_msg = new cMessage("OK");
-          send(temp_msg, "out_land");
-      }*/
+   else if(strcmp(msg->getName(), "newplane_land") == 0){
+       if(free) {
+           free = false;
+           EV << "Sending OK to landing_queue\n";
+           temp_msg = new cMessage("OK");
+           send(temp_msg, "out_land");
+       }
+       else {
+           temp_msg = new cMessage("REQ_LAND");
+           send(temp_msg, "out_pista");
+       }
+   }
+   else if(strcmp(msg->getName(), "newplane_takeoff") == 0){
+       if(free) {
+           free= false;
+           EV << "Sending OK to takeoff_queue\n";
+           temp_msg = new cMessage("OK");
+           send(temp_msg, "out_takeoff");
+       }
+       else {
+           temp_msg = new cMessage("REQ_TAKEOFF");
+           send(temp_msg, "out_pista");
+       }
+   }
 
 }
 

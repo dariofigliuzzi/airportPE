@@ -33,25 +33,35 @@ void Parking::initialize()
 void Parking::handleMessage(cMessage *msg)
 {
     if(msg->isSelfMessage()) {
-        //invio plane al takeoff allo scadere del tempo di parcheggio
-        send(plane, "out_takeoff");
+        if(!parking_queue.isEmpty()) {
+           EV << "Start Take-off\n";
+           cObject* obj_plane;
+           obj_plane = parking_queue.pop();
+           plane = check_and_cast<Plane*>(obj_plane);
+           send(plane, "out_takeoff");
+        }
+        else
+           EV<< "The parking_queue is empty\n";
     }
-    EV << "Adding plane on parking_queue\n";
-    Plane *myMsg;
-    myMsg = check_and_cast<Plane*>(msg);
-    parking_queue.insert(myMsg);
-    count_pk = 0;
-    plane = myMsg;
-    //attivazione timer per tempo parcheggio
-    cancelAndDelete(beep);
-    beep = new cMessage("beep");
-    scheduleAt(simTime()+timerpk, beep);
+    else {
+        EV << "Adding plane on parking_queue\n";
+        Plane *myMsg;
+        myMsg = check_and_cast<Plane*>(msg);
+        parking_queue.insert(myMsg);
+        count_pk = 0;
+        plane = myMsg;
+        //attivazione timer per tempo parcheggio
+        cancelAndDelete(beep);
+        beep = new cMessage("beep");
+        scheduleAt(simTime()+timerpk, beep);
 
-    EV << "PRINTING PARKING QUEUE:\n";
-    for(cQueue::Iterator iter(parking_queue,0); !iter.end(); iter++) {
-          myMsg = (Plane*) iter();
-          EV << count_pk++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+        EV << "PRINTING PARKING QUEUE:\n";
+        for(cQueue::Iterator iter(parking_queue,0); !iter.end(); iter++) {
+                  myMsg = (Plane*) iter();
+                  EV << count_pk++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+        }
     }
+
 }
 
 }; // namespace

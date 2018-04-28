@@ -23,7 +23,7 @@ simple Sky
 {
     parameters:
         bool sendInitialMessage = default(false);
-        double procTime @unit(s) = default(5s);
+        double procTime @unit(s) = default(1s);
     gates:
         output out;
 }

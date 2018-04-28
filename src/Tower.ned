@@ -23,6 +23,7 @@ simple Tower
 {
     parameters:
         bool sendInitialMessage = default(false);
+        //double procTime @unit(s) = default(5s);
     gates:
         input in_land;
         output out_land;
