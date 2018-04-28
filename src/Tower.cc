@@ -33,6 +33,11 @@ void Tower::handleMessage(cMessage *msg)
        temp_msg = new cMessage("OK");
        send(temp_msg, "out_land");
    }
+  /* if(strcmp(msg->getName(), "newplane") == 0){
+          EV << "Sending OK to landing_queue\n";
+          temp_msg = new cMessage("OK");
+          send(temp_msg, "out_land");
+      }*/
 
 }
 
