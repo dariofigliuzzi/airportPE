@@ -1,17 +1,15 @@
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see http://www.gnu.org/licenses/.
-// PORCODDIOdiocane
+/*
+ * ------------ PISTA ----------------------------------------------------------------------
+ *
+ * Codice atto alla gestione delle due code di attarraggio e partenza.
+ * Può ricevere messaggi da 3 fonti:
+ *      -> isSelfMessage: Gestisce decollo/atterraggio effettuato con successo;
+ *      -> Tower: quando tower richiede lo stato della pista;
+ *      -> Takeoff: un aereo in partenza giunge da parking;
+ *      -> Landing: un aereo in arrivo giunge da landing;
+ *
+ * ------------------------------------------------------------------------------------------
+ */
 
 #include "Pista.h"
 #include "Plane_m.h"
@@ -33,29 +31,38 @@ void Pista::initialize()
 
 void Pista::handleMessage(cMessage *msg)
 {
-    if(msg->isSelfMessage()) {
-        if(strcmp(msg->getName(), "beep_land") == 0) {
+    //selfMessage segnalante partenza/decollo con successo
+    if(msg->isSelfMessage())
+    {
+
+        if(strcmp(msg->getName(), "beep_land") == 0)
+        {
             EV << "LANDED: " << "Plane - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
             send(myMsg, "out_parking");
         }
-        else {
-            EV << "TAKED-OFF: " << "Plane - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+
+        else
+        {
+            EV << "DEPARTED: " << "Plane - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
             myMsg = nullptr;
         }
+
         free_strip = true;
     }
 
     //Gestione messaggio di richiesta da Tower
-    else if(strcmp(msg->getName(), "REQ") == 0) {
-        if(free_strip) {
+    else if(strcmp(msg->getName(), "REQ") == 0)
+    {
+        if(free_strip)
+        {
             cMessage *tmp_msg = new cMessage("Free");
             send(tmp_msg, "out_tower");
-
         }
     }
 
     //Gestione messaggio con info aereo da Takeoff
-    else if(strcmp(msg->getSenderModule()->getFullName(), "takeoff") == 0) {
+    else if(strcmp(msg->getSenderModule()->getFullName(), "takeoff") == 0)
+    {
         free_strip = false;
         EV << "<---Taking-off\n";
         myMsg = check_and_cast<Plane*>(msg);
@@ -69,7 +76,8 @@ void Pista::handleMessage(cMessage *msg)
     }
 
     //Gestione messaggio con info aereo da Landing
-    else {
+    else
+    {
         free_strip = false;
         EV << "--->Landing\n";
         myMsg = check_and_cast<Plane*>(msg);

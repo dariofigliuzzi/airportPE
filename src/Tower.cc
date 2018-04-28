@@ -1,17 +1,15 @@
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
+/*
+ * ------------ TORRE di CONTROLLO ---------------------------------------------------------
+ *
+ * Codice atto alla gestione delle due code di attarraggio e partenza.
+ * Può ricevere messaggi da 3 fonti:
+ *      -> Pista: Risposta ad una richiesta di conoscenza pista libera/occupata;
+ *      -> landing_queue/takeoff_queue: Ricezione di una richiesta di atterraggio/partenza;
+ *
+ * Nel caso di richiesta atterraggio/partenza, provvede a rispondere l'esito al mittente.
+ *
+ * ------------------------------------------------------------------------------------------
+ */
 
 #include "Tower.h"
 
@@ -35,23 +33,29 @@ void Tower::initialize()
 void Tower::handleMessage(cMessage *msg)
 {
    //Gestione messaggio "Free" da Pista
-   if(strcmp(msg->getName(), "Free") == 0){
+   if(strcmp(msg->getName(), "Free") == 0)
+   {
        free = true;
    }
 
    //Gestione richieste dalle code di landing e takeoff
-   else if(strcmp(msg->getName(), "newplane_land") == 0 || strcmp(msg->getName(), "newplane_takeoff") == 0){
-
+   else if(strcmp(msg->getName(), "newplane_land") == 0 || strcmp(msg->getName(), "newplane_takeoff") == 0)
+   {
        req = new cMessage("REQ");
        send(req, "out_pista");
+
        if(free){
            EV << "Sending OK to queues\n";
-           if(strcmp(msg->getName(), "newplane_land") == 0){
+
+           if(strcmp(msg->getName(), "newplane_land") == 0)
+           {
                free = false;
                temp_msg_land = new cMessage("OK");
                send(temp_msg_land, "out_land");
            }
-           else if(strcmp(msg->getName(), "newplane_takeoff") == 0) {
+
+           else if(strcmp(msg->getName(), "newplane_takeoff") == 0)
+           {
                free = false;
                temp_msg_takeoff = new cMessage("OK");
                send(temp_msg_takeoff, "out_takeoff");

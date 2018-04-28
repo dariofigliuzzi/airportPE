@@ -1,19 +1,13 @@
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
+/*
+ * ------------ LANDING --------------------------------------------------------------------
+ *
+ * Codice atto alla gestione di due tipi di messaggi:
+ *      -> ACK/NAK della torre: in tal caso l'aereo da più tempo in attesa atterrerà (se c'è);
+ *      -> Aggiunta aereo alla landing_queue;
+ *
+ * ------------------------------------------------------------------------------------------
+ */
 
-//porcoddio
 #include "Landing.h"
 #include "Plane_m.h"
 
@@ -37,8 +31,11 @@ void Landing::initialize()
 void Landing::handleMessage(cMessage *msg)
 {
     //Gestione messaggio OK proveniente dalla Tower
-    if(strcmp(msg->getName(), "OK") == 0) {
-        if(!landing_queue.isEmpty()) {
+    if(strcmp(msg->getName(), "OK") == 0)
+    {
+        //se ci sono aerei in attesa di atterrare
+        if(!landing_queue.isEmpty())
+        {
             EV << "Start Landing\n";
             cObject* obj_plane;
             obj_plane = landing_queue.pop();
@@ -46,12 +43,14 @@ void Landing::handleMessage(cMessage *msg)
             //plane = obj_plane->
             send(plane, "out_pista");
         }
-        else
-            EV<< "The landing_queue is empty\n";
+
+        else EV<< "The landing_queue is empty\n";
     }
 
     //Gestione dei messaggi Plane*
-    else {
+    else
+    {
+
         EV << "Adding plane on landing_queue\n";
         Plane *myMsg;
         myMsg = check_and_cast<Plane*>(msg);
@@ -59,13 +58,16 @@ void Landing::handleMessage(cMessage *msg)
         count = 0;
         plane = myMsg;
         EV << "PRINTING LANDING QUEUE:\n";
-        for(cQueue::Iterator iter(landing_queue,0); !iter.end(); iter++) {
+
+        for(cQueue::Iterator iter(landing_queue,0); !iter.end(); iter++)
+        {
             myMsg =(Plane*) iter();
             EV << count++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
         }
+
         notify = new cMessage("newplane_land");
         send(notify, "out_tower");
     }
 }
 
-}; // namespace
+};
