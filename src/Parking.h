@@ -17,6 +17,7 @@
 #define __AIRPORT_TCX_H
 
 #include <omnetpp.h>
+#include "Plane_m.h"
 
 using namespace omnetpp;
 
@@ -27,6 +28,9 @@ namespace airport {
  */
 class Parking : public cSimpleModule
 {
+  private:
+    cMessage *beep;
+    Plane* plane;
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

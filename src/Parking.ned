@@ -23,6 +23,7 @@ simple Parking
 {
     parameters:
         bool sendInitialMessage = default(false);
+        double procTime @unit(s) = default(5s); //tempo in cui rimane parcheggiato
     gates:
         input in_pista;
         output out_pista;

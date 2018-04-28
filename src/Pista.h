@@ -27,6 +27,8 @@ namespace airport {
  */
 class Pista : public cSimpleModule
 {
+private:
+    cMessage *beep;
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

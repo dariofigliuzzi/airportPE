@@ -23,6 +23,8 @@ simple Pista
 {
     parameters:
         bool sendInitialMessage = default(false);
+        double procTime @unit(s) = default(1s); //periodo per controllare se la pista è libera
+        double procTime2 @unit(s) = default(5s); //tempo per atterrare
     gates:
         input in_tower;
         output out_tower;

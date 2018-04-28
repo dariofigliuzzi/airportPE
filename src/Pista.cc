@@ -14,30 +14,45 @@
 // 
 
 #include "Pista.h"
+#include "Plane_m.h"
 
 namespace airport {
 
 Define_Module(Pista);
 
 bool free_strip;
+simtime_t timerp;
 
 void Pista::initialize()
 {
+    beep = new cMessage("beep");
+    timerp = par("procTime");
+    scheduleAt(simTime() + timerp, beep);
     free_strip = true;
-    cMessage *tmp_msg = new cMessage("Free");
-
-       if(free_strip) {
-           send(tmp_msg, "out_tower");
-           free_strip = false;
-       }
 
 }
 
 void Pista::handleMessage(cMessage *msg)
 {
-    EV << "--->Landing\n";
-    //inserire schedulazione "dopo tl send()"
-    send(msg, "out_parking");
+    if(msg->isSelfMessage()) {
+        cMessage *tmp_msg = new cMessage("Free");
+
+        if(free_strip) {
+             send(tmp_msg, "out_tower");
+             //free_strip = false; // disabilitato per testing
+
+             cancelAndDelete(beep);
+             beep = new cMessage("beep");
+             scheduleAt(simTime()+timerp, beep);
+        }
+    }
+    else {
+        EV << "--->Landing\n";
+        Plane *myMsg;
+        myMsg = check_and_cast<Plane*>(msg);
+        EV << "LANDED: " << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+        send(myMsg, "out_parking");
+    }
 }
 
 }; // namespace

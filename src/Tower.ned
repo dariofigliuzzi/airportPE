@@ -29,4 +29,7 @@ simple Tower
         
         input in_pista;
         output out_pista;
+        
+        input in_takeoff;
+        output out_takeoff;
 }

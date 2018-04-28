@@ -28,6 +28,10 @@ namespace airport {
  */
 class Landing : public cSimpleModule
 {
+  private:
+    cMessage *beep, *notify;
+    Plane *plane;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
