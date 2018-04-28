@@ -19,12 +19,16 @@ namespace airport {
 
 Define_Module(Tower);
 
-cMessage *temp_msg;
+cMessage *temp_msg_land;
+cMessage *temp_msg_takeoff;
+cMessage *req;
 bool free;
 
 void Tower::initialize()
 {
-    temp_msg = nullptr;
+    temp_msg_land = nullptr;
+    temp_msg_takeoff = nullptr;
+    req = nullptr;
     free = true;
 }
 
@@ -36,19 +40,39 @@ void Tower::handleMessage(cMessage *msg)
        temp_msg = new cMessage("OK");
        send(temp_msg, "out_land");*/
    }
-   else if(strcmp(msg->getName(), "newplane_land") == 0){
-       if(free) {
+   else if(strcmp(msg->getName(), "newplane_land") == 0 || strcmp(msg->getName(), "newplane_takeoff") == 0){
+      /* if(free) {
            free = false;
-           EV << "Sending OK to landing_queue\n";
-           temp_msg = new cMessage("OK");
-           send(temp_msg, "out_land");
+           //EV << "Sending OK to landing_queue\n";
+           EV << "Sending OK to queues\n";
+
+           temp_msg_land = new cMessage("OK");
+           send(temp_msg_land, "out_land");
+           temp_msg_takeoff = new cMessage("OK");
+           send(temp_msg_takeoff, "out_takeoff");
        }
        else {
-           temp_msg = new cMessage("REQ_LAND");
-           send(temp_msg, "out_pista");
+           //temp_msg = new cMessage("REQ_LAND");
+           req = new cMessage("REQ");
+           send(req, "out_pista");
+       }*/
+       req = new cMessage("REQ");
+       send(req, "out_pista");
+       if(free){
+           EV << "Sending OK to queues\n";
+           if(strcmp(msg->getName(), "newplane_land") == 0){
+               free = false;
+               temp_msg_land = new cMessage("OK");
+               send(temp_msg_land, "out_land");
+           }
+           else if(strcmp(msg->getName(), "newplane_takeoff") == 0) {
+               free = false;
+               temp_msg_takeoff = new cMessage("OK");
+               send(temp_msg_takeoff, "out_takeoff");
+           }
        }
    }
-   else if(strcmp(msg->getName(), "newplane_takeoff") == 0){
+  /* else if(strcmp(msg->getName(), "newplane_takeoff") == 0){
        if(free) {
            free= false;
            EV << "Sending OK to takeoff_queue\n";
@@ -59,7 +83,7 @@ void Tower::handleMessage(cMessage *msg)
            temp_msg = new cMessage("REQ_TAKEOFF");
            send(temp_msg, "out_pista");
        }
-   }
+   }*/
 
 }
 
