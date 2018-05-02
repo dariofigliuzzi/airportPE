@@ -28,7 +28,7 @@ namespace airport {
  * packet Plane
  * {
  *     int id;
- *     int kind;              //0:Sky 1:Tower
+ *     int kind;              //0:Sky 1:Ground
  *     simtime_t time_l;
  *     simtime_t time_p;
  *     simtime_t time_o;

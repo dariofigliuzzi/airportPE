@@ -3,7 +3,8 @@
  *
  * Codice atto alla gestione delle due code di attarraggio e partenza.
  * Può ricevere messaggi da 3 fonti:
- *      -> isSelfMessage: Gestisce decollo/atterraggio effettuato con successo;
+ *      -> isSelfMessage: Gestisce decollo/atterraggio effettuato con successo,
+ *          in tal caso avvisa tower del suo liberamento;
  *      -> Tower: quando tower richiede lo stato della pista;
  *      -> Takeoff: un aereo in partenza giunge da parking;
  *      -> Landing: un aereo in arrivo giunge da landing;
@@ -48,6 +49,10 @@ void Pista::handleMessage(cMessage *msg)
         }
 
         free_strip = true;
+        //avviso la torre che la pista è libera
+        EV << "Pista liberata dopo atterraggio/partenza, avviso torre\n";
+        cMessage *tmp_msg = new cMessage("freeTrack");
+        send(tmp_msg, "out_tower");
     }
 
     //Gestione messaggio di richiesta da Tower

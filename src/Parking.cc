@@ -48,7 +48,8 @@ void Parking::handleMessage(cMessage *msg)
 
         EV << "Adding plane on parking_queue\n";
         Plane *myMsg;
-        myMsg = check_and_cast<Plane*>(msg);
+        myMsg = dynamic_cast<Plane*>(msg);
+        myMsg->setKind(1);
         parking_queue.insert(myMsg);
         count_pk = 0;
         plane = myMsg;

@@ -11,6 +11,8 @@
  */
 
 #include "Takeoff.h"
+#include "Plane_m.h"
+
 
 namespace airport {
 
@@ -48,12 +50,33 @@ void Takeoff::handleMessage(cMessage *msg)
              EV<< "The takeoff_queue is empty\n";
      }
 
-    //Gestione messaggio con info aereo da Parking
+     //arriva il segnale di pista libera, mando info sull'aereo
+     //che attende da più tempo(se c'è), così torre può scegliere
+     //fra lui e il primo in landing_queue
+     if(strcmp(msg->getName(), "freeTrack") == 0)
+     {
+         if(takeoff_queue.isEmpty())
+         {
+             EV << "Landing: Non ho aereo che vogliono decollare\n";
+             cMessage *tmp_msg = new cMessage("noPlanesDeparting");
+             send(tmp_msg, "out_tower");
+         }
+         else
+         {
+             EV << "Free track: mando a torre info sull'aereo in cima alla coda takeoff_queue\n";
+             cObject* obj_plane = takeoff_queue.front();
+             Plane* p = dynamic_cast<Plane*>(obj_plane);
+             send(p, "out_tower");
+         }
+     }
+
+     //Gestione messaggio con info aereo da Parking
      else
      {
          EV << "Adding plane on takeoff_queue\n";
          Plane *myMsg;
-         myMsg = check_and_cast<Plane*>(msg);
+         myMsg = dynamic_cast<Plane*>(msg);
+         myMsg->setEnter(simTime()); //segno a che ore entra nella lista takeoff_queue
          takeoff_queue.insert(myMsg);
          count_to = 0;
          plane = myMsg;

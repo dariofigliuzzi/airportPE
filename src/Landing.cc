@@ -39,12 +39,33 @@ void Landing::handleMessage(cMessage *msg)
             EV << "Start Landing\n";
             cObject* obj_plane;
             obj_plane = landing_queue.pop();
-            plane = check_and_cast<Plane*>(obj_plane);
+            plane = dynamic_cast<Plane*>(obj_plane);
             //plane = obj_plane->
             send(plane, "out_pista");
         }
 
         else EV<< "The landing_queue is empty\n";
+    }
+
+    //arriva il segnale di pista libera, mando info sull'aereo
+    //che attende da più tempo(se c'è), così torre può scegliere
+    //fra lui e il primo in takeoff_queue
+    if(strcmp(msg->getName(), "freeTrack") == 0)
+    {
+        if(landing_queue.isEmpty())
+        {
+            EV << "Landing: Non ho aereo che vogliono atterrare\n";
+            cMessage *tmp_msg = new cMessage("noPlanesLanding");
+            send(tmp_msg, "out_tower");
+        }
+
+        else
+        {
+            EV << "Free track: mando a torre info sull'aereo in cima alla coda landing_queue\n";
+            cObject* obj_plane = landing_queue.front();
+            Plane* p = dynamic_cast<Plane*>(obj_plane);
+            send(p, "out_tower");
+        }
     }
 
     //Gestione dei messaggi Plane*
@@ -53,7 +74,8 @@ void Landing::handleMessage(cMessage *msg)
 
         EV << "Adding plane on landing_queue\n";
         Plane *myMsg;
-        myMsg = check_and_cast<Plane*>(msg);
+        myMsg = dynamic_cast<Plane*>(msg);
+        myMsg->setEnter(simTime()); //segno a che ore entra nella lista takeoff_queue
         landing_queue.insert(myMsg);
         count = 0;
         plane = myMsg;
