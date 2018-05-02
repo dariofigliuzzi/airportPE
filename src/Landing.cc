@@ -30,9 +30,13 @@ void Landing::initialize()
 
 void Landing::handleMessage(cMessage *msg)
 {
+    Plane *myMsg;
+    myMsg = dynamic_cast<Plane*>(msg);
+
     //Gestione messaggio OK proveniente dalla Tower
     if(strcmp(msg->getName(), "OK") == 0)
     {
+        EV <<"we\n";
         //se ci sono aerei in attesa di atterrare
         if(!landing_queue.isEmpty())
         {
@@ -68,14 +72,13 @@ void Landing::handleMessage(cMessage *msg)
         }
     }
 
-    //Gestione dei messaggi Plane*
-    else
+    //Gestione dei messaggi Plane* da sky
+    else if(myMsg)
     {
 
         EV << "Adding plane on landing_queue\n";
-        Plane *myMsg;
-        myMsg = dynamic_cast<Plane*>(msg);
         myMsg->setEnter(simTime()); //segno a che ore entra nella lista takeoff_queue
+        EV << myMsg-> getEnter() << "\n";
         landing_queue.insert(myMsg);
         count = 0;
         plane = myMsg;

@@ -34,7 +34,7 @@ void Sky::handleMessage(cMessage *msg)
         msg_creation(count_s);
 
         send(plane, "out");
-        cancelAndDelete(beep);
+        //if(beep!=nullptr) cancelAndDelete(beep);
         beep = new cMessage("beep");
         scheduleAt(simTime()+timer, beep);
         count_s++;

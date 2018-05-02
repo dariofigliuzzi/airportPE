@@ -32,6 +32,8 @@ void Takeoff::initialize()
 
 void Takeoff::handleMessage(cMessage *msg)
 {
+    Plane *myMsg;
+    myMsg = dynamic_cast<Plane*>(msg);
     //Gestione messaggio OK proveniente da Tower
     if(strcmp(msg->getName(), "OK") == 0)
     {
@@ -41,7 +43,7 @@ void Takeoff::handleMessage(cMessage *msg)
              EV << "Start Take-off\n";
              cObject* obj_plane;
              obj_plane = takeoff_queue.pop();
-             plane = check_and_cast<Plane*>(obj_plane);
+             plane = dynamic_cast<Plane*>(obj_plane);
              //plane = obj_plane->
              send(plane, "out_pista");
          }
@@ -71,15 +73,12 @@ void Takeoff::handleMessage(cMessage *msg)
      }
 
      //Gestione messaggio con info aereo da Parking
-     else
+     else if(myMsg)
      {
          EV << "Adding plane on takeoff_queue\n";
-         Plane *myMsg;
-         myMsg = dynamic_cast<Plane*>(msg);
          myMsg->setEnter(simTime()); //segno a che ore entra nella lista takeoff_queue
          takeoff_queue.insert(myMsg);
          count_to = 0;
-         plane = myMsg;
 
          EV << "PRINTING TAKE-OFF QUEUE:\n";
          for(cQueue::Iterator iter(takeoff_queue,0); !iter.end(); iter++)
