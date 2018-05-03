@@ -67,7 +67,11 @@ void Landing::handleMessage(cMessage *msg)
         {
             EV << "Free track: mando a torre info sull'aereo in cima alla coda landing_queue\n";
             cObject* obj_plane = landing_queue.front();
-            Plane* p = dynamic_cast<Plane*>(obj_plane);
+            plane = dynamic_cast<Plane*>(obj_plane);
+            Plane *p = new Plane(nullptr);
+            simtime_t t = plane->getEnter();
+            p->setEnter(t);
+            p->setKind(0);
             send(p, "out_tower");
         }
     }

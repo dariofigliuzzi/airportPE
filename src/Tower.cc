@@ -53,16 +53,70 @@ void Tower::handleMessage(cMessage *msg)
        free = true;
        cMessage *tmp_msg = new cMessage("freeTrack");
        send(tmp_msg, "out_land");
-       //send(tmp_msg, "out_takeoff");
+       cMessage *tmp_msg1 = new cMessage("freeTrack");
+       send(tmp_msg1, "out_takeoff");
    }
 
-   /*if(p || (strcmp(msg->getName(), "noPlanesLanding") == 0) || (strcmp(msg->getName(), "noPlanesDeparting") == 0))
+   if((strcmp(msg->getName(), "noPlanesLanding") == 0) || (strcmp(msg->getName(), "noPlanesDeparting") == 0))
    {
-       if(!p->getKind() || (strcmp(msg->getName(), "noPlanesLanding") == 0)) //caso aereo proveniente da landing/in landing non ho aerei
+       if(strcmp(msg->getName(), "noPlanesLanding") == 0)
        {
            planeCheck++;
-           if(p) landingPlaneTimer = p->getEnter().dbl() * 1000;
-           else landingPlaneTimer = 0;
+           landingPlaneTimer = 0;
+
+           if(planeCheck == 2)
+           {
+               if((!takeoffPlaneTimer && landingPlaneTimer) || (takeoffPlaneTimer > landingPlaneTimer))
+               {
+                  EV << "Torre: Faccio atterrare in seguito a pista libera\n";
+                  cMessage *tmp_msg = new cMessage("OK");//sfrutto questo messaggio
+                  send(tmp_msg, "out_land");
+                  free = false;
+               }
+
+               if((takeoffPlaneTimer && !landingPlaneTimer) || (takeoffPlaneTimer < landingPlaneTimer))
+               {
+                   EV << "Torre: Faccio decollare in seguito a pista libera\n";
+                   cMessage *tmp_msg = new cMessage("OK");//sfrutto questo messaggio
+                   send(tmp_msg, "out_takeoff");
+                   free = false;
+               }
+               planeCheck = 0;
+           }
+       }
+       else if(strcmp(msg->getName(), "noPlanesDeparting") == 0)
+       {
+           planeCheck++;
+           takeoffPlaneTimer = 0;
+
+           if(planeCheck == 2)
+           {
+               if((!takeoffPlaneTimer && landingPlaneTimer) || (takeoffPlaneTimer > landingPlaneTimer))
+               {
+                  EV << "Torre: Faccio atterrare in seguito a pista libera\n";
+                  cMessage *tmp_msg = new cMessage("OK");//sfrutto questo messaggio
+                  send(tmp_msg, "out_land");
+                  free = false;
+               }
+
+               if((takeoffPlaneTimer && !landingPlaneTimer) || (takeoffPlaneTimer < landingPlaneTimer))
+               {
+                   EV << "Torre: Faccio decollare in seguito a pista libera\n";
+                   cMessage *tmp_msg = new cMessage("OK");//sfrutto questo messaggio
+                   send(tmp_msg, "out_takeoff");
+                   free = false;
+               }
+               planeCheck = 0;
+           }
+       }
+   }
+
+   if(p)
+   {
+       if(!p->getKind()) //caso aereo proveniente da landing/in landing non ho aerei
+       {
+           planeCheck++;
+           landingPlaneTimer = p->getEnter().dbl() * 1000;
 
            if(planeCheck == 2)
            {
@@ -85,16 +139,17 @@ void Tower::handleMessage(cMessage *msg)
            }
        }
 
-       else if(p->getKind() || (strcmp(msg->getName(), "noPlanesDeparting") == 0)) //caso aereo proveniente da takeoff/in takeoff non ho aerei
+       else if(p->getKind()) //caso aereo proveniente da takeoff/in takeoff non ho aerei
        {
            planeCheck++;
-           if(p) takeoffPlaneTimer = p->getEnter().dbl() * 1000;
-           else takeoffPlaneTimer = 0;
+           takeoffPlaneTimer = p->getEnter().dbl() * 1000;
+           EV << "Timer aereo: " << takeoffPlaneTimer << "\n";
 
            if(planeCheck == 2)
            {
                if((!takeoffPlaneTimer && landingPlaneTimer) || (takeoffPlaneTimer > landingPlaneTimer))
                {
+                  EV << "Torre: Faccio atterrare in seguito a pista libera\n";
                   cMessage *tmp_msg = new cMessage("OK");//sfrutto questo messaggio
                   send(tmp_msg, "out_land");
                      free = false;
@@ -102,6 +157,7 @@ void Tower::handleMessage(cMessage *msg)
 
                if((takeoffPlaneTimer && !landingPlaneTimer) || (takeoffPlaneTimer < landingPlaneTimer))
                {
+                   EV << "Torre: Faccio decollare in seguito a pista libera\n";
                    cMessage *tmp_msg = new cMessage("OK");//sfrutto questo messaggio
                    send(tmp_msg, "out_takeoff");
                    free = false;
@@ -110,7 +166,7 @@ void Tower::handleMessage(cMessage *msg)
                planeCheck = 0;
           }
        }
-   }*/
+   }
 
    //Gestione richieste dalle code di landing e takeoff
    else if(strcmp(msg->getName(), "newplane_land") == 0 || strcmp(msg->getName(), "newplane_takeoff") == 0)

@@ -39,7 +39,6 @@ void Pista::handleMessage(cMessage *msg)
     //selfMessage segnalante partenza/decollo con successo
     if(msg->isSelfMessage())
     {
-
         if(strcmp(msg->getName(), "beep_land") == 0)
         {
             EV << "LANDED: " << "Plane - " <<plane->getId() << " " << plane->getEnter() <<"\n";
