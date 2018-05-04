@@ -36,7 +36,6 @@ void Landing::handleMessage(cMessage *msg)
     //Gestione messaggio OK proveniente dalla Tower
     if(strcmp(msg->getName(), "OK") == 0)
     {
-        EV <<"we\n";
         //se ci sono aerei in attesa di atterrare
         if(!landing_queue.isEmpty())
         {

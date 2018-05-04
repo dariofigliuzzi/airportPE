@@ -50,6 +50,7 @@ void Takeoff::handleMessage(cMessage *msg)
 
          else
              EV<< "The takeoff_queue is empty\n";
+
      }
 
      //arriva il segnale di pista libera, mando info sull'aereo
@@ -59,15 +60,20 @@ void Takeoff::handleMessage(cMessage *msg)
      {
          if(takeoff_queue.isEmpty())
          {
-             EV << "Landing: Non ho aereo che vogliono decollare\n";
+             EV << "Takeoff: Non ho aerei che vogliono decollare\n";
              cMessage *tmp_msg = new cMessage("noPlanesDeparting");
              send(tmp_msg, "out_tower");
          }
+
          else
          {
              EV << "Free track: mando a torre info sull'aereo in cima alla coda takeoff_queue\n";
              cObject* obj_plane = takeoff_queue.front();
-             Plane* p = dynamic_cast<Plane*>(obj_plane);
+             plane = dynamic_cast<Plane*>(obj_plane);
+             Plane *p = new Plane(nullptr);
+             simtime_t t = plane->getEnter();
+             p->setEnter(t);
+             p->setKind(1);
              send(p, "out_tower");
          }
      }
