@@ -46,14 +46,15 @@ void Tower::handleMessage(cMessage *msg)
 {
    Plane* p;
    p = dynamic_cast<Plane*>(msg);
+
    //Gestione messaggio "Free" da Pista
    if(strcmp(msg->getName(), "Free") == 0)
    {
        free = true;
    }
 
-   //non appena la pista si libera chiedo a landing
-   //e takeoff di dirmi quali sono i tempi di attesa
+   //Non appena la pista si libera chiedo a Landing
+   //e Takeoff di dirmi quali sono i tempi di attesa
    if(strcmp(msg->getName(), "freeTrack") == 0)
    {
        EV << "Tower: avviso Landing e Takeoff di pista libera!\n";
@@ -128,7 +129,7 @@ void Tower::handleMessage(cMessage *msg)
                    cMessage *tmp_msg = new cMessage("OK");//sfrutto questo messaggio
                    send(tmp_msg, "out_takeoff");
                    free = false;
-                   EV << "3landingPlaneTimer: " << landingPlaneTimer << " takeoffPlaneTimer: " << takeoffPlaneTimer << "\n";
+                   EV << "landingPlaneTimer: " << landingPlaneTimer << " takeoffPlaneTimer: " << takeoffPlaneTimer << "\n";
                }
                planeCheck = 0;
            }
@@ -168,9 +169,6 @@ void Tower::handleMessage(cMessage *msg)
    //Gestione richieste dalle code di landing e takeoff
    else if(strcmp(msg->getName(), "newplane_land") == 0 || strcmp(msg->getName(), "newplane_takeoff") == 0)
    {
-       //req = new cMessage("REQ");
-       //send(req, "out_pista");
-
        if(free){
            EV << "Sending OK to queues\n";
 

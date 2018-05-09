@@ -34,6 +34,7 @@ void Takeoff::handleMessage(cMessage *msg)
 {
     Plane *myMsg;
     myMsg = dynamic_cast<Plane*>(msg);
+
     //Gestione messaggio OK proveniente da Tower
     if(strcmp(msg->getName(), "OK") == 0)
     {
@@ -44,7 +45,6 @@ void Takeoff::handleMessage(cMessage *msg)
              cObject* obj_plane;
              obj_plane = takeoff_queue.pop();
              plane = dynamic_cast<Plane*>(obj_plane);
-             //plane = obj_plane->
              send(plane, "out_pista");
          }
 

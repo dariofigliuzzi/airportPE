@@ -1,12 +1,12 @@
 #
-# OMNeT++/OMNEST Makefile for Airport
+# OMNeT++/OMNEST Makefile for airportPE
 #
 # This file was generated with the command:
 #  opp_makemake -f --deep
 #
 
 # Name of target to be created (-o option)
-TARGET = Airport$(D)$(EXE_SUFFIX)
+TARGET = airportPE$(D)$(EXE_SUFFIX)
 TARGET_DIR = .
 
 # User interface (uncomment one) (-u option)
@@ -113,7 +113,7 @@ $O/%.o: %.cc $(COPTS_FILE) | msgheaders smheaders
 
 %_m.cc %_m.h: %.msg
 	$(qecho) MSGC: $<
-	$(Q)$(MSGC) -s _m.cc -MD -MP -MF $O/$(basename $@).d $(MSGCOPTS) $?
+	$(Q)$(MSGC) -s _m.cc $(MSGCOPTS) $?
 
 %_sm.cc %_sm.h: %.sm
 	$(qecho) SMC: $<
