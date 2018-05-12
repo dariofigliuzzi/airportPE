@@ -89,7 +89,7 @@ void Takeoff::handleMessage(cMessage *msg)
          EV << "PRINTING TAKE-OFF QUEUE:\n";
          for(cQueue::Iterator iter(takeoff_queue,0); !iter.end(); iter++)
          {
-            myMsg =(Plane*) iter();
+            myMsg =(Plane*) iter.operator *();
             EV << count_to++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
          }
 

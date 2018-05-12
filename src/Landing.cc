@@ -88,7 +88,7 @@ void Landing::handleMessage(cMessage *msg)
 
         for(cQueue::Iterator iter(landing_queue,0); !iter.end(); iter++)
         {
-            myMsg =(Plane*) iter();
+            myMsg =(Plane*) iter.operator *();
             EV << count++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
         }
 

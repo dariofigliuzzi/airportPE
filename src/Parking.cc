@@ -55,9 +55,14 @@ void Parking::handleMessage(cMessage *msg)
         plane = myMsg;
 
         EV << "PRINTING PARKING QUEUE:\n";
-        for(cQueue::Iterator iter(parking_queue,0); !iter.end(); iter++)
+        /*for(cQueue::Iterator iter(parking_queue,0); !iter.end(); iter++)
         {
                   myMsg = (Plane*) iter();
+                  EV << count_pk++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+        }*/
+        for(cQueue::Iterator iter(parking_queue); !iter.end(); iter++)
+        {
+                  myMsg =  (Plane*) iter.operator *();
                   EV << count_pk++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
         }
 
