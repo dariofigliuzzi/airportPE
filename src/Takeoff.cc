@@ -41,7 +41,7 @@ void Takeoff::handleMessage(cMessage *msg)
 
         if(!takeoff_queue.isEmpty())
         {
-             EV << "Start Take-off\n";
+             EV << "TAKEOFF: Start Take-off\n";
              cObject* obj_plane;
              obj_plane = takeoff_queue.pop();
              plane = dynamic_cast<Plane*>(obj_plane);
@@ -49,7 +49,7 @@ void Takeoff::handleMessage(cMessage *msg)
          }
 
          else
-             EV<< "The takeoff_queue is empty\n";
+             EV<< "TAKEOFF: The takeoff_queue is empty\n";
 
      }
 
@@ -60,42 +60,46 @@ void Takeoff::handleMessage(cMessage *msg)
      {
          if(takeoff_queue.isEmpty())
          {
-             EV << "Takeoff: Non ho aerei che vogliono decollare\n";
+             EV << "TAKEOFF A FREETRACK: Non ho aerei che vogliono decollare\n";
              cMessage *tmp_msg = new cMessage("noPlanesDeparting");
              send(tmp_msg, "out_tower");
          }
 
          else
          {
-             EV << "Free track: mando a torre info sull'aereo in cima alla coda takeoff_queue\n";
-             cObject* obj_plane = takeoff_queue.front();
-             plane = dynamic_cast<Plane*>(obj_plane);
-             Plane *p = new Plane(nullptr);
-             simtime_t t = plane->getEnter();
-             p->setEnter(t);
-             p->setKind(1);
-             send(p, "out_tower");
+             EV << "TAKEOFF A FREETRACK: mando a torre info sull'aereo in cima alla coda takeoff_queue\n";
+             send_info();
          }
      }
 
      //Gestione messaggio con info aereo da Parking
      else if(myMsg)
      {
-         EV << "Adding plane on takeoff_queue\n";
+         EV << "TAKEOFF: Aereo aggiunto alla takeoff_queue\n";
          myMsg->setEnter(simTime()); //segno a che ore entra nella lista takeoff_queue
          takeoff_queue.insert(myMsg);
          count_to = 0;
 
-         EV << "PRINTING TAKE-OFF QUEUE:\n";
+         EV << "TAKEOFF: PRINTING TAKE-OFF QUEUE:\n";
          for(cQueue::Iterator iter(takeoff_queue,0); !iter.end(); iter++)
          {
             myMsg =(Plane*) iter.operator *();
             EV << count_to++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
          }
 
-         notify = new cMessage("newplane_takeoff");
-         send(notify, "out_tower");
+         EV << "TAKEOFF A FREETRACK: mando a torre info sull'aereo appena arrivato\n";
+         send_info();
      }
+}
+
+void Takeoff::send_info() {
+    cObject* obj_plane = takeoff_queue.front();
+    plane = dynamic_cast<Plane*>(obj_plane);
+    Plane *p = new Plane(nullptr);
+    simtime_t t = plane->getEnter();
+    p->setEnter(t);
+    p->setKind(1);
+    send(p, "out_tower");
 }
 
 }; // namespace

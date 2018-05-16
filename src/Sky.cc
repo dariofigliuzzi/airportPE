@@ -29,12 +29,11 @@ void Sky::handleMessage(cMessage *msg)
 {
     if(msg->isSelfMessage())
     {
-        EV << "Wait period is over, sending plane\n";
+        EV << "SKY: Periodo di attesa scaduto, invio aereo\n";
 
         msg_creation(count_s);
 
         send(plane, "out");
-        //if(beep!=nullptr) cancelAndDelete(beep);
         beep = new cMessage("beep");
         scheduleAt(simTime()+timer, beep);
         count_s++;

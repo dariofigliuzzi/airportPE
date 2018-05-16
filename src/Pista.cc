@@ -25,9 +25,7 @@ Plane* plane;    //Plane* in cui memorizzare le info aereo proveniente da Takeof
 
 void Pista::initialize()
 {
-    beep = nullptr;
     free_strip = true;
-
 }
 
 void Pista::handleMessage(cMessage *msg)
@@ -41,41 +39,31 @@ void Pista::handleMessage(cMessage *msg)
     {
         if(strcmp(msg->getName(), "beep_land") == 0)
         {
-            EV << "LANDED: " << "Plane - " <<plane->getId() << " " << plane->getEnter() <<"\n";
+            EV << "TRACK: LANDED: " << "Plane - " <<plane->getId() << " " << plane->getEnter() <<"\n";
             send(plane, "out_parking");
         }
 
-        else
+        else if(strcmp(msg->getName(), "beep_takeoff") == 0)
         {
-            EV << "DEPARTED: " << "Plane - " <<plane->getId() << " " << plane->getEnter() <<"\n";
+            EV << "TRACK: DEPARTED: " << "Plane - " <<plane->getId() << " " << plane->getEnter() <<"\n";
             myMsg = nullptr;
         }
-
         free_strip = true;
+
         //avviso la torre che la pista è libera
-        EV << "Pista liberata dopo atterraggio/partenza, avviso torre\n";
+        EV << "TRACK: Pista liberata dopo atterraggio/partenza, avviso torre\n";
         cMessage *tmp_msg = new cMessage("freeTrack");
         send(tmp_msg, "out_tower");
     }
 
-    //Gestione messaggio di richiesta da Tower
-    else if(strcmp(msg->getName(), "REQ") == 0)
-    {
-        if(free_strip)
-        {
-            cMessage *tmp_msg = new cMessage("Free");
-            send(tmp_msg, "out_tower");
-        }
-    }
 
     //Gestione messaggio con info aereo da Takeoff
     else if(plane->getKind())
     {
         free_strip = false;
-        EV << "<---Taking-off\n";
+        EV << "TRACK: <---Taking-off\n";
 
         //Start timer per decollo
-        //if(beep!=nullptr) cancelAndDelete(beep);
         beep = new cMessage("beep_takeoff");
         timerp = par("procTime3");
         scheduleAt(simTime() + timerp, beep);
@@ -86,10 +74,9 @@ void Pista::handleMessage(cMessage *msg)
     else if(!plane->getKind())
     {
         free_strip = false;
-        EV << "--->Landing\n";
+        EV << "TRACK: --->Landing\n";
 
         //Start timer per atterraggio
-        if(beep!=nullptr) cancelAndDelete(beep);
         beep = new cMessage("beep_land");
         timerp = par("procTime2");
         scheduleAt(simTime() + timerp, beep);

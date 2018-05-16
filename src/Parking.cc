@@ -34,32 +34,28 @@ void Parking::handleMessage(cMessage *msg)
     {
         if(!parking_queue.isEmpty())
         {
-           EV << "Start Take-off\n";
+           EV << "PARKING: Start Take-off\n";
            cObject* obj_plane;
            obj_plane = parking_queue.pop();
            plane = dynamic_cast<Plane*>(obj_plane);
            send(plane, "out_takeoff");
         }
         else
-           EV<< "The parking_queue is empty\n";
+           EV<< "PARKING: The parking_queue is empty\n";
     }
 
     //Gestione messaggio con info aereo da Pista
     else if(myMsg)
     {
 
-        EV << "Adding plane on parking_queue\n";
+        EV << "PARKING: Aereo aggiunto alla parking_queue\n";
         myMsg->setKind(1);
         parking_queue.insert(myMsg);
         count_pk = 0;
         plane = myMsg;
 
-        EV << "PRINTING PARKING QUEUE:\n";
-        /*for(cQueue::Iterator iter(parking_queue,0); !iter.end(); iter++)
-        {
-                  myMsg = (Plane*) iter();
-                  EV << count_pk++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
-        }*/
+        EV << "PARKING: PRINTING PARKING QUEUE:\n";
+
         for(cQueue::Iterator iter(parking_queue); !iter.end(); iter++)
         {
                   myMsg =  (Plane*) iter.operator *();
@@ -67,7 +63,6 @@ void Parking::handleMessage(cMessage *msg)
         }
 
         //Start timer per tempo parcheggio
-        //if(beep!=nullptr) cancelAndDelete(beep);
         beep = new cMessage("beep");
         scheduleAt(simTime()+timerpk, beep);
 

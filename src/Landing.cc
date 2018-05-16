@@ -39,14 +39,14 @@ void Landing::handleMessage(cMessage *msg)
         //se ci sono aerei in attesa di atterrare
         if(!landing_queue.isEmpty())
         {
-            EV << "Start Landing\n";
+            EV << "LANDING: Start Landing\n";
             cObject* obj_plane;
             obj_plane = landing_queue.pop();
             plane = dynamic_cast<Plane*>(obj_plane);
             send(plane, "out_pista");
         }
 
-        else EV<< "The landing_queue is empty\n";
+        else EV<< "LANDING: The landing_queue is empty\n";
     }
 
     /*arriva il segnale di pista libera, mando info sull'aereo
@@ -56,21 +56,15 @@ void Landing::handleMessage(cMessage *msg)
     {
         if(landing_queue.isEmpty())
         {
-            EV << "Landing: Non ho aereo che vogliono atterrare\n";
+            EV << "LANDING: Non ho aerei che vogliono atterrare\n";
             cMessage *tmp_msg = new cMessage("noPlanesLanding");
             send(tmp_msg, "out_tower");
         }
 
         else
         {
-            EV << "Free track: mando a torre info sull'aereo in cima alla coda landing_queue\n";
-            cObject* obj_plane = landing_queue.front();
-            plane = dynamic_cast<Plane*>(obj_plane);
-            Plane *p = new Plane(nullptr);
-            simtime_t t = plane->getEnter();
-            p->setEnter(t);
-            p->setKind(0);
-            send(p, "out_tower");
+            EV << "LANDING A FREETRACK: mando a torre info sull'aereo in cima alla coda landing_queue\n";
+            send_info();
         }
     }
 
@@ -78,13 +72,13 @@ void Landing::handleMessage(cMessage *msg)
     else if(myMsg)
     {
 
-        EV << "Adding plane on landing_queue\n";
+        EV << "LANDING: Aereo aggiunto alla landing_queue\n";
         myMsg->setEnter(simTime()); //segno a che ore entra nella lista landing_queue
         EV << myMsg-> getEnter() << "\n";
         landing_queue.insert(myMsg);
         count = 0;
         plane = myMsg;
-        EV << "PRINTING LANDING QUEUE:\n";
+        EV << "LANDING: PRINTING LANDING QUEUE:\n";
 
         for(cQueue::Iterator iter(landing_queue,0); !iter.end(); iter++)
         {
@@ -92,9 +86,19 @@ void Landing::handleMessage(cMessage *msg)
             EV << count++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
         }
 
-        notify = new cMessage("newplane_land");
-        send(notify, "out_tower");
+        EV << "LANDING A FREETRACK: mando a torre info sull'aereo appena arrivato\n";
+        send_info();
     }
+}
+
+void Landing::send_info() {
+    cObject* obj_plane = landing_queue.front();
+    plane = dynamic_cast<Plane*>(obj_plane);
+    Plane *p = new Plane(nullptr);
+    simtime_t t = plane->getEnter();
+    p->setEnter(t);
+    p->setKind(0);
+    send(p, "out_tower");
 }
 
 };

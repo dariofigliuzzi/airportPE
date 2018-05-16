@@ -30,6 +30,7 @@ class Tower : public cSimpleModule
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void send_OK();
 };
 
 }; // namespace
