@@ -16,12 +16,10 @@ namespace airport {
 Define_Module(Parking);
 
 cQueue parking_queue("parking_queue");
-int count_pk;
 simtime_t timerpk;
 
 void Parking::initialize()
 {
-    count_pk = 0;
     timerpk = par("procTime");
 }
 
@@ -51,7 +49,6 @@ void Parking::handleMessage(cMessage *msg)
         EV << "PARKING: Aereo aggiunto alla parking_queue\n";
         myMsg->setKind(1);
         parking_queue.insert(myMsg);
-        count_pk = 0;
         plane = myMsg;
 
         EV << "PARKING: PRINTING PARKING QUEUE:\n";
@@ -59,7 +56,7 @@ void Parking::handleMessage(cMessage *msg)
         for(cQueue::Iterator iter(parking_queue); !iter.end(); iter++)
         {
                   myMsg =  (Plane*) iter.operator *();
-                  EV << count_pk++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+                  EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() <<"\n";
         }
 
         //Start timer per tempo parcheggio

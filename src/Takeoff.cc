@@ -19,12 +19,10 @@ namespace airport {
 Define_Module(Takeoff);
 
 cQueue takeoff_queue("takeoff_queue");
-int count_to;
 
 
 void Takeoff::initialize()
 {
-    count_to = 0;
     plane = nullptr;
     notify = nullptr;
     beep = nullptr;
@@ -78,13 +76,12 @@ void Takeoff::handleMessage(cMessage *msg)
          EV << "TAKEOFF: Aereo aggiunto alla takeoff_queue\n";
          myMsg->setEnter(simTime()); //segno a che ore entra nella lista takeoff_queue
          takeoff_queue.insert(myMsg);
-         count_to = 0;
 
          EV << "TAKEOFF: PRINTING TAKE-OFF QUEUE:\n";
          for(cQueue::Iterator iter(takeoff_queue,0); !iter.end(); iter++)
          {
             myMsg =(Plane*) iter.operator *();
-            EV << count_to++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+            EV <<"- ID: " <<myMsg->getId() << "  ENTRY(s): " << myMsg->getEnter() <<"\n";
          }
 
          EV << "TAKEOFF A FREETRACK: mando a torre info sull'aereo appena arrivato\n";

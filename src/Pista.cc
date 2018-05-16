@@ -39,13 +39,13 @@ void Pista::handleMessage(cMessage *msg)
     {
         if(strcmp(msg->getName(), "beep_land") == 0)
         {
-            EV << "TRACK: LANDED: " << "Plane - " <<plane->getId() << " " << plane->getEnter() <<"\n";
+            EV << "TRACK: LANDED - " << "ID: " <<plane->getId() << "  ENTRY(s): " << plane->getEnter() <<"\n";
             send(plane, "out_parking");
         }
 
         else if(strcmp(msg->getName(), "beep_takeoff") == 0)
         {
-            EV << "TRACK: DEPARTED: " << "Plane - " <<plane->getId() << " " << plane->getEnter() <<"\n";
+            EV << "TRACK: DEPARTED - " << "ID: " <<plane->getId() << "  ENTRY(s): " << plane->getEnter() <<"\n";
             myMsg = nullptr;
         }
         free_strip = true;

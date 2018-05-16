@@ -17,12 +17,10 @@ namespace airport {
 Define_Module(Landing);
 
 cQueue landing_queue("landing_queue");
-int count;
 simtime_t timerl;
 
 void Landing::initialize()
 {
-   count = 0;
    plane = nullptr;
    notify = nullptr;
    beep = nullptr;
@@ -74,16 +72,14 @@ void Landing::handleMessage(cMessage *msg)
 
         EV << "LANDING: Aereo aggiunto alla landing_queue\n";
         myMsg->setEnter(simTime()); //segno a che ore entra nella lista landing_queue
-        EV << myMsg-> getEnter() << "\n";
         landing_queue.insert(myMsg);
-        count = 0;
         plane = myMsg;
         EV << "LANDING: PRINTING LANDING QUEUE:\n";
 
         for(cQueue::Iterator iter(landing_queue,0); !iter.end(); iter++)
         {
             myMsg =(Plane*) iter.operator *();
-            EV << count++ << " - " <<myMsg->getId() << " " << myMsg->getEnter() <<"\n";
+            EV <<"- ID: " <<myMsg->getId() << "  ENTRY(s): " << myMsg->getEnter() <<"\n";
         }
 
         EV << "LANDING A FREETRACK: mando a torre info sull'aereo appena arrivato\n";
