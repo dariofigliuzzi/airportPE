@@ -79,7 +79,7 @@ void Landing::handleMessage(cMessage *msg)
         for(cQueue::Iterator iter(landing_queue,0); !iter.end(); iter++)
         {
             myMsg =(Plane*) iter.operator *();
-            EV <<"- ID: " <<myMsg->getId() << "  ENTRY(s): " << myMsg->getEnter() <<"\n";
+            EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() <<"\n";
         }
 
         EV << "LANDING A FREETRACK: mando a torre info sull'aereo appena arrivato\n";

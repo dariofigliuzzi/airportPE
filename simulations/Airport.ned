@@ -28,28 +28,28 @@ import airport.Takeoff;
 
 network Airport
 {
-    @display("bgb=360,373");
+    @display("bgb=338,641");
     submodules:
 
         tower: Tower {
-            @display("p=49,182");
+            @display("p=265,417");
         }
         sky: Sky {
             //procTime = 5s;
-            @display("p=88,328");
+            @display("p=168,579");
         }
         parking: Parking {
-            @display("p=217,36");
+            @display("p=168,87");
         }
         pista: Pista {
-            @display("p=127,81");
+            @display("p=71,235");
         }
         landing: Landing {
-            @display("p=217,261");
+            @display("p=71,417");
         }
         takeoff: Takeoff {
 
-            @display("p=294,143");
+            @display("p=265,235");
         }
     connections:
 
@@ -72,7 +72,7 @@ network Airport
 
         takeoff.out_pista --> {  delay = 100ms; } --> pista.in_takeoff;
         takeoff.in_pista <-- {  delay = 100ms; } <-- pista.out_takeoff;
-        
+
         takeoff.out_tower --> {  delay = 100ms; } --> tower.in_takeoff;
         takeoff.in_tower <-- {  delay = 100ms; } <-- tower.out_takeoff;
 

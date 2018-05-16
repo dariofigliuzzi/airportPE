@@ -81,7 +81,7 @@ void Takeoff::handleMessage(cMessage *msg)
          for(cQueue::Iterator iter(takeoff_queue,0); !iter.end(); iter++)
          {
             myMsg =(Plane*) iter.operator *();
-            EV <<"- ID: " <<myMsg->getId() << "  ENTRY(s): " << myMsg->getEnter() <<"\n";
+            EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() <<"\n";
          }
 
          EV << "TAKEOFF A FREETRACK: mando a torre info sull'aereo appena arrivato\n";
