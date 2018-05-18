@@ -28,8 +28,8 @@ simple Tower
         input in_land;
         output out_land;
         
-        input in_pista;
-        output out_pista;
+        input in_airstrip;
+        output out_airstrip;
         
         input in_takeoff;
         output out_takeoff;

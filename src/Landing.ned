@@ -29,6 +29,6 @@ simple Landing
         input in_tower;
         output out_tower;
         
-        input in_pista;
-        output out_pista;
+        input in_airstrip;
+        output out_airstrip;
 }

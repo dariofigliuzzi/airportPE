@@ -27,8 +27,8 @@ simple Takeoff
         input in_parking;
         output out_parking;
         
-        input in_pista;
-        output out_pista;
+        input in_airstrip;
+        output out_airstrip;
         
         input in_tower;
         output out_tower;

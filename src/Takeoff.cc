@@ -43,7 +43,7 @@ void Takeoff::handleMessage(cMessage *msg)
              cObject* obj_plane;
              obj_plane = takeoff_queue.pop();
              plane = dynamic_cast<Plane*>(obj_plane);
-             send(plane, "out_pista");
+             send(plane, "out_airstrip");
          }
 
          else

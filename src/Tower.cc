@@ -4,7 +4,7 @@
  * Codice atto alla gestione delle due code di attarraggio e partenza.
  * Può ricevere messaggi da 3 fonti:
  *
- *      -> Pista: Risposta ad una richiesta di conoscenza pista libera/occupata;
+ *      -> Airstrip: Risposta ad una richiesta di conoscenza pista libera/occupata;
  *           free_track: mi informa della liberazione della pista, che posso assegnare ad
  *              un altro aereo in partenza/arrivo.
  *
@@ -72,6 +72,15 @@ void Tower::send_OK() {
     {
         obj_plane = plane_queue.front();
         tmp_plane = dynamic_cast<Plane*>(obj_plane);
+
+        EV << "TOWER: PRINTING PLANE QUEUE:\n";
+
+        for(cQueue::Iterator iter(plane_queue,0); !iter.end(); iter++)
+        {
+            Plane* myMsg =(Plane*) iter.operator *();
+            EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() << "  KIND:" << myMsg->getKind() << "\n"; //0:Landing 1:Takeoff
+        }
+
         if(tmp_plane->getKind() == 0) { //aereo in arrivo da landing
             free = false;
             EV << "TOWER: Faccio atterrare in seguito a pista libera\n";

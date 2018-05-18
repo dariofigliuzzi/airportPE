@@ -18,7 +18,7 @@ package airport.simulations;
 import airport.Tower;
 import airport.Sky;
 import airport.Parking;
-import airport.Pista;
+import airport.Airstrip;
 import airport.Landing;
 import airport.Takeoff;
 
@@ -41,7 +41,7 @@ network Airport
         parking: Parking {
             @display("p=168,87");
         }
-        pista: Pista {
+        airstrip: Airstrip {
             @display("p=71,235");
         }
         landing: Landing {
@@ -58,20 +58,20 @@ network Airport
         landing.out_tower --> {  delay = 100ms; } --> tower.in_land;
         landing.in_tower <-- {  delay = 100ms; } <-- tower.out_land;
 
-        landing.out_pista --> {  delay = 100ms; } --> pista.in_landing;
-        landing.in_pista <-- {  delay = 100ms; } <-- pista.out_landing;
+        landing.out_airstrip --> {  delay = 100ms; } --> airstrip.in_landing;
+        landing.in_airstrip <-- {  delay = 100ms; } <-- airstrip.out_landing;
 
-        pista.out_parking --> {  delay = 100ms; } --> parking.in_pista;
-        pista.in_parking <-- {  delay = 100ms; } <-- parking.out_pista;
+        airstrip.out_parking --> {  delay = 100ms; } --> parking.in_airstrip;
+        airstrip.in_parking <-- {  delay = 100ms; } <-- parking.out_airstrip;
 
-        pista.out_tower --> {  delay = 100ms; } --> tower.in_pista;
-        pista.in_tower <-- {  delay = 100ms; } <-- tower.out_pista;
+        airstrip.out_tower --> {  delay = 100ms; } --> tower.in_airstrip;
+        airstrip.in_tower <-- {  delay = 100ms; } <-- tower.out_airstrip;
 
         takeoff.out_parking --> {  delay = 100ms; } --> parking.in_takeoff;
         takeoff.in_parking <-- {  delay = 100ms; } <-- parking.out_takeoff;
 
-        takeoff.out_pista --> {  delay = 100ms; } --> pista.in_takeoff;
-        takeoff.in_pista <-- {  delay = 100ms; } <-- pista.out_takeoff;
+        takeoff.out_airstrip --> {  delay = 100ms; } --> airstrip.in_takeoff;
+        takeoff.in_airstrip <-- {  delay = 100ms; } <-- airstrip.out_takeoff;
 
         takeoff.out_tower --> {  delay = 100ms; } --> tower.in_takeoff;
         takeoff.in_tower <-- {  delay = 100ms; } <-- tower.out_takeoff;

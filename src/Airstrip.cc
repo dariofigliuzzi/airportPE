@@ -1,5 +1,5 @@
 /*
- * ------------ PISTA ----------------------------------------------------------------------
+ * ------------ Airstrip ----------------------------------------------------------------------
  *
  * Codice atto alla gestione delle due code di attarraggio e partenza.
  * Può ricevere messaggi da 3 fonti:
@@ -12,23 +12,23 @@
  * ------------------------------------------------------------------------------------------
  */
 
-#include "Pista.h"
+#include "Airstrip.h"
 #include "Plane_m.h"
 
 namespace airport {
 
-Define_Module(Pista);
+Define_Module(Airstrip);
 
 bool free_strip; //true se pista è libera
 simtime_t timerp;
 Plane* plane;    //Plane* in cui memorizzare le info aereo proveniente da Takeoff
 
-void Pista::initialize()
+void Airstrip::initialize()
 {
     free_strip = true;
 }
 
-void Pista::handleMessage(cMessage *msg)
+void Airstrip::handleMessage(cMessage *msg)
 {
     Plane* myMsg;
     myMsg = dynamic_cast<Plane*>(msg);

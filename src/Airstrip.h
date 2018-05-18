@@ -25,7 +25,7 @@ namespace airport {
 /**
  * Implements the Txc simple module. See the NED file for more information.
  */
-class Pista : public cSimpleModule
+class Airstrip : public cSimpleModule
 {
 private:
     cMessage *beep;

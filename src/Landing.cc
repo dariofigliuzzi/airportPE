@@ -41,7 +41,7 @@ void Landing::handleMessage(cMessage *msg)
             cObject* obj_plane;
             obj_plane = landing_queue.pop();
             plane = dynamic_cast<Plane*>(obj_plane);
-            send(plane, "out_pista");
+            send(plane, "out_airstrip");
         }
 
         else EV<< "LANDING: The landing_queue is empty\n";

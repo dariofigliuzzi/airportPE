@@ -19,7 +19,7 @@ package airport;
 // Immediately sends out any message it receives. It can optionally generate
 // a message at the beginning of the simulation, to bootstrap the process.
 //
-simple Pista
+simple Airstrip
 {
     parameters:
         bool sendInitialMessage = default(false);

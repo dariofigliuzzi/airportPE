@@ -42,7 +42,7 @@ void Parking::handleMessage(cMessage *msg)
            EV<< "PARKING: The parking_queue is empty\n";
     }
 
-    //Gestione messaggio con info aereo da Pista
+    //Gestione messaggio con info aereo da Airstrip
     else if(myMsg)
     {
 
