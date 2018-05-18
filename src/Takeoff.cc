@@ -51,30 +51,13 @@ void Takeoff::handleMessage(cMessage *msg)
 
      }
 
-     //arriva il segnale di pista libera, mando info sull'aereo
-     //che attende da più tempo(se c'è), così torre può scegliere
-     //fra lui e il primo in landing_queue
-     if(strcmp(msg->getName(), "freeTrack") == 0)
-     {
-         if(takeoff_queue.isEmpty())
-         {
-             EV << "TAKEOFF A FREETRACK: Non ho aerei che vogliono decollare\n";
-             cMessage *tmp_msg = new cMessage("noPlanesDeparting");
-             send(tmp_msg, "out_tower");
-         }
-
-         else
-         {
-             EV << "TAKEOFF AL FREETRACK: mando a torre info sull'aereo in cima alla coda takeoff_queue\n";
-             send_info();
-         }
-     }
 
      //Gestione messaggio con info aereo da Parking
      else if(myMsg)
      {
          EV << "TAKEOFF: Aereo aggiunto alla takeoff_queue\n";
-         myMsg->setEnter(simTime()); //segno a che ore entra nella lista takeoff_queue
+         myMsg->setEnter(simTime());        //segno a che ore entra nella lista takeoff_queue
+         myMsg->setKind(1);                 //setto per sicurezza, verrà tolto dopo i dovuti controlli
          takeoff_queue.insert(myMsg);
 
          EV << "TAKEOFF: PRINTING TAKE-OFF QUEUE:\n";
@@ -84,19 +67,19 @@ void Takeoff::handleMessage(cMessage *msg)
             EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() <<"\n";
          }
 
-         EV << "TAKEOFF A TORRE: mando a torre info sull'aereo appena arrivato\n";
-         send_info();
+         EV << "TAKEOFF A TOWER: mando a torre info sull'aereo appena arrivato\n";
+         send(get_info(myMsg), "out_tower");
      }
 }
 
-void Takeoff::send_info() {
-    cObject* obj_plane = takeoff_queue.front();
-    plane = dynamic_cast<Plane*>(obj_plane);
-    Plane *p = new Plane(nullptr);
-    simtime_t t = plane->getEnter();
-    p->setEnter(t);
-    p->setKind(1);
-    send(p, "out_tower");
+//Prende le info dal myMsg della handleMessage. Non posso passare alla send
+//direttamente myMsg perchè attualmente risiede nella takeoff_queue
+Plane* Takeoff::get_info(Plane* p) {
+    plane = new Plane(nullptr);
+    plane->setEnter(p->getEnter());
+    plane->setId(p->getId());
+    plane->setKind(p->getKind());
+    return plane;
 }
 
 }; // namespace

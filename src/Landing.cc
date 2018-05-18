@@ -47,33 +47,16 @@ void Landing::handleMessage(cMessage *msg)
         else EV<< "LANDING: The landing_queue is empty\n";
     }
 
-    /*arriva il segnale di pista libera, mando info sull'aereo
-      che attende da più tempo(se c'è), così Tower può scegliere
-      fra lui e il primo in takeoff_queue*/
-    if(strcmp(msg->getName(), "freeTrack") == 0)
-    {
-        if(landing_queue.isEmpty())
-        {
-            EV << "LANDING: Non ho aerei che vogliono atterrare\n";
-            cMessage *tmp_msg = new cMessage("noPlanesLanding");
-            send(tmp_msg, "out_tower");
-        }
-
-        else
-        {
-            EV << "LANDING AL FREETRACK: mando a torre info sull'aereo in cima alla coda landing_queue\n";
-            send_info();
-        }
-    }
 
     //Gestione dei messaggi Plane* da sky
     else if(myMsg)
     {
-
         EV << "LANDING: Aereo aggiunto alla landing_queue\n";
-        myMsg->setEnter(simTime()); //segno a che ore entra nella lista landing_queue
+
+        myMsg->setEnter(simTime());     //segno a che ore entra nella lista landing_queue
+        myMsg->setKind(0);              //setto per sicurezza
         landing_queue.insert(myMsg);
-        plane = myMsg;
+
         EV << "LANDING: PRINTING LANDING QUEUE:\n";
 
         for(cQueue::Iterator iter(landing_queue,0); !iter.end(); iter++)
@@ -82,19 +65,20 @@ void Landing::handleMessage(cMessage *msg)
             EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() <<"\n";
         }
 
+
         EV << "LANDING A TOWER: mando a torre info sull'aereo appena arrivato\n";
-        send_info();
+        send(get_info(myMsg), "out_tower");
     }
 }
 
-void Landing::send_info() {
-    cObject* obj_plane = landing_queue.front();
-    plane = dynamic_cast<Plane*>(obj_plane);
-    Plane *p = new Plane(nullptr);
-    simtime_t t = plane->getEnter();
-    p->setEnter(t);
-    p->setKind(0);
-    send(p, "out_tower");
+//Prende le info dal myMsg della handleMessage. Non posso passare alla send
+//direttamente myMsg perchè attualmente risiede nella landing_queue
+Plane* Landing::get_info(Plane* p) {
+    plane = new Plane(nullptr);
+    plane->setEnter(p->getEnter());
+    plane->setId(p->getId());
+    plane->setKind(p->getKind());
+    return plane;
 }
 
 };

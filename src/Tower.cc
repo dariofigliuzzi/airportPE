@@ -53,6 +53,7 @@ void Tower::handleMessage(cMessage *msg)
        EV << "TOWER: Avviso FREETRACK ricevuto\n";
        free = true;
        send_OK();
+       return;
    }
 
    else if(p)
@@ -61,6 +62,7 @@ void Tower::handleMessage(cMessage *msg)
        EV<< "TOWER: Aereo aggiunto nella relativa coda\n";
 
        if(free) send_OK();
+       return;
    }
 }
 
