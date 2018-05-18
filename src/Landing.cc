@@ -61,7 +61,7 @@ void Landing::handleMessage(cMessage *msg)
 
         else
         {
-            EV << "LANDING A FREETRACK: mando a torre info sull'aereo in cima alla coda landing_queue\n";
+            EV << "LANDING AL FREETRACK: mando a torre info sull'aereo in cima alla coda landing_queue\n";
             send_info();
         }
     }
@@ -82,7 +82,7 @@ void Landing::handleMessage(cMessage *msg)
             EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() <<"\n";
         }
 
-        EV << "LANDING A FREETRACK: mando a torre info sull'aereo appena arrivato\n";
+        EV << "LANDING A TOWER: mando a torre info sull'aereo appena arrivato\n";
         send_info();
     }
 }

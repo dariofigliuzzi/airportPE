@@ -65,7 +65,7 @@ void Takeoff::handleMessage(cMessage *msg)
 
          else
          {
-             EV << "TAKEOFF A FREETRACK: mando a torre info sull'aereo in cima alla coda takeoff_queue\n";
+             EV << "TAKEOFF AL FREETRACK: mando a torre info sull'aereo in cima alla coda takeoff_queue\n";
              send_info();
          }
      }
@@ -84,7 +84,7 @@ void Takeoff::handleMessage(cMessage *msg)
             EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() <<"\n";
          }
 
-         EV << "TAKEOFF A FREETRACK: mando a torre info sull'aereo appena arrivato\n";
+         EV << "TAKEOFF A TORRE: mando a torre info sull'aereo appena arrivato\n";
          send_info();
      }
 }
