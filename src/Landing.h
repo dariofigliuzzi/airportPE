@@ -31,6 +31,8 @@ class Landing : public cSimpleModule
   private:
     cMessage *beep, *notify;
     Plane *plane;
+    simsignal_t arrivalSignalId;
+    simsignal_t arrivalSignalLength;
 
   protected:
     virtual void initialize();

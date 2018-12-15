@@ -21,9 +21,12 @@ simtime_t timerl;
 
 void Landing::initialize()
 {
+    landing_queue.clear();
    plane = nullptr;
    notify = nullptr;
    beep = nullptr;
+   arrivalSignalId = registerSignal("arrivalId");
+   arrivalSignalLength = registerSignal("arrivalLength");
 }
 
 void Landing::handleMessage(cMessage *msg)
@@ -42,6 +45,10 @@ void Landing::handleMessage(cMessage *msg)
             obj_plane = landing_queue.pop();
             plane = dynamic_cast<Plane*>(obj_plane);
             send(plane, "out_airstrip");
+
+            //emissione segnale contenente id aereo
+            emit(arrivalSignalLength, landing_queue.getLength());
+            emit(arrivalSignalId, plane->getId());
         }
 
         else EV<< "LANDING: The landing_queue is empty\n";
@@ -56,6 +63,9 @@ void Landing::handleMessage(cMessage *msg)
         myMsg->setEnter(simTime());     //segno a che ore entra nella lista landing_queue
         myMsg->setKind(0);              //setto per sicurezza
         landing_queue.insert(myMsg);
+
+        //emissione segnale con numero di aereo nella coda Landing
+        emit(arrivalSignalLength, landing_queue.getLength());
 
         EV << "LANDING: PRINTING LANDING QUEUE:\n";
 

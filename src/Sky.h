@@ -32,6 +32,8 @@ class Sky : public cSimpleModule
     cMessage *beep;
     Plane *plane;
 
+    simsignal_t arrivalSignalId;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

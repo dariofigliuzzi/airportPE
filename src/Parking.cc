@@ -21,6 +21,11 @@ simtime_t timerpk;
 void Parking::initialize()
 {
     timerpk = par("procTime");
+
+    parking_queue.clear();
+
+    arrivalSignalId = registerSignal("arrivalId");
+    arrivalSignalLength = registerSignal("arrivalLength");
 }
 
 void Parking::handleMessage(cMessage *msg)
@@ -37,6 +42,8 @@ void Parking::handleMessage(cMessage *msg)
            obj_plane = parking_queue.pop();
            plane = dynamic_cast<Plane*>(obj_plane);
            send(plane, "out_takeoff");
+           emit(arrivalSignalLength, parking_queue.getLength());
+           emit(arrivalSignalId, plane->getId());
         }
         else
            EV<< "PARKING: The parking_queue is empty\n";
@@ -50,6 +57,9 @@ void Parking::handleMessage(cMessage *msg)
         myMsg->setKind(1);
         parking_queue.insert(myMsg);
         plane = myMsg;
+
+        //emissione segnale contenente lunghezza coda parcheggio
+        emit(arrivalSignalLength, parking_queue.getLength());
 
         EV << "PARKING: PRINTING PARKING QUEUE:\n";
 

@@ -23,7 +23,10 @@ simple Sky
 {
     parameters:
         bool sendInitialMessage = default(false);
-        double procTime @unit(s) = default(3s);
+        double procTime @unit(s) = default(48s); //interarrival time
+        @signal[arrivalId](type="long");
+        @statistic[skyRecId](title="ID"; source="arrivalId"; record=vector);
+        
     gates:
         output out;
 }

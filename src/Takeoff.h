@@ -32,6 +32,10 @@ class Takeoff : public cSimpleModule
     cMessage *beep;
     cMessage* notify;
     Plane *plane;
+
+    simsignal_t arrivalSignalId;
+    simsignal_t arrivalSignalLength;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

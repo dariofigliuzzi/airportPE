@@ -24,6 +24,11 @@ simple Landing
     parameters:
         bool sendInitialMessage = default(false);
         //double procTime @unit(s) = default(3s);
+        @signal[arrivalId](type="long");
+        @signal[arrivalLength](type="long");
+        @statistic[LandingRecId](title="ID"; source="arrivalId"; record=vector);
+        @statistic[LandingRecLength](title="LANDING QUEUE LENGTH"; source="arrivalLength"; record=vector);
+        
     gates:
         input in_sky;
         input in_tower;

@@ -18,11 +18,15 @@ int count_s;
 
 void Sky::initialize()
 {
+
     count_s = 0;                    //contatore aerei
     beep = new cMessage("beep");    //per creazione periodica aerei
     plane =nullptr;                 //cMessage con info su aereo
-    timer = par("procTime");
+    //timer = par("procTime");
+    timer = rand() % 10 + 25;
     scheduleAt(simTime() + timer, beep);
+
+    arrivalSignalId = registerSignal("arrivalId");
 }
 
 void Sky::handleMessage(cMessage *msg)
@@ -37,6 +41,8 @@ void Sky::handleMessage(cMessage *msg)
         beep = new cMessage("beep");
         scheduleAt(simTime()+timer, beep);
         count_s++;
+
+        emit(arrivalSignalId, plane->getId());
     }
 }
 

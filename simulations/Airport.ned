@@ -55,25 +55,25 @@ network Airport
 
         sky.out --> {  delay = 0ms; } --> landing.in_sky;
 
-        landing.out_tower --> {  delay = 100ms; } --> tower.in_land;
-        landing.in_tower <-- {  delay = 100ms; } <-- tower.out_land;
+        landing.out_tower --> {  delay = 0ms; } --> tower.in_land;
+        landing.in_tower <-- {  delay = 0ms; } <-- tower.out_land;
 
-        landing.out_airstrip --> {  delay = 100ms; } --> airstrip.in_landing;
-        landing.in_airstrip <-- {  delay = 100ms; } <-- airstrip.out_landing;
+        landing.out_airstrip --> {  delay = 0ms; } --> airstrip.in_landing;
+        landing.in_airstrip <-- {  delay = 0ms; } <-- airstrip.out_landing;
 
-        airstrip.out_parking --> {  delay = 100ms; } --> parking.in_airstrip;
-        airstrip.in_parking <-- {  delay = 100ms; } <-- parking.out_airstrip;
+        airstrip.out_parking --> {  delay = 0ms; } --> parking.in_airstrip;
+        airstrip.in_parking <-- {  delay = 0ms; } <-- parking.out_airstrip;
 
-        airstrip.out_tower --> {  delay = 100ms; } --> tower.in_airstrip;
-        airstrip.in_tower <-- {  delay = 100ms; } <-- tower.out_airstrip;
+        airstrip.out_tower --> {  delay = 0ms; } --> tower.in_airstrip;
+        airstrip.in_tower <-- {  delay = 0ms; } <-- tower.out_airstrip;
 
-        takeoff.out_parking --> {  delay = 100ms; } --> parking.in_takeoff;
-        takeoff.in_parking <-- {  delay = 100ms; } <-- parking.out_takeoff;
+        takeoff.out_parking --> {  delay = 0ms; } --> parking.in_takeoff;
+        takeoff.in_parking <-- {  delay = 0ms; } <-- parking.out_takeoff;
 
-        takeoff.out_airstrip --> {  delay = 100ms; } --> airstrip.in_takeoff;
-        takeoff.in_airstrip <-- {  delay = 100ms; } <-- airstrip.out_takeoff;
+        takeoff.out_airstrip --> {  delay = 0ms; } --> airstrip.in_takeoff;
+        takeoff.in_airstrip <-- {  delay = 0ms; } <-- airstrip.out_takeoff;
 
-        takeoff.out_tower --> {  delay = 100ms; } --> tower.in_takeoff;
-        takeoff.in_tower <-- {  delay = 100ms; } <-- tower.out_takeoff;
+        takeoff.out_tower --> {  delay = 0ms; } --> tower.in_takeoff;
+        takeoff.in_tower <-- {  delay = 0ms; } <-- tower.out_takeoff;
 
 }

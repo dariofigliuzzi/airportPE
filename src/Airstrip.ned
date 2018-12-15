@@ -19,23 +19,27 @@ package airport;
 // Immediately sends out any message it receives. It can optionally generate
 // a message at the beginning of the simulation, to bootstrap the process.
 //
+
 simple Airstrip
 {
     parameters:
+
         bool sendInitialMessage = default(false);
-        //double procTime @unit(s) = default(1s); //periodo per controllare se la pista è libera
-        double procTime2 @unit(s) = default(2s); //tempo per atterrare
-        double procTime3 @unit(s) = default(4s); //tempo per decollare
+        double procTime2 @unit(s) = default(15s); //tempo per atterrare
+        double procTime3 @unit(s) = default(25s); //tempo per decollare
+               
     gates:
+
         input in_tower;
         output out_tower;
         
         input in_landing;
         output out_landing;
-        
+
         input in_parking;
         output out_parking;
-        
+
         input in_takeoff;
         output out_takeoff;
 }
+

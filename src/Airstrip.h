@@ -29,6 +29,8 @@ class Airstrip : public cSimpleModule
 {
 private:
     cMessage *beep;
+    //simsignal_t arrivalSignalId;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);

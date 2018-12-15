@@ -23,9 +23,13 @@ cQueue takeoff_queue("takeoff_queue");
 
 void Takeoff::initialize()
 {
+    takeoff_queue.clear();
     plane = nullptr;
     notify = nullptr;
     beep = nullptr;
+
+    arrivalSignalId = registerSignal("arrivalId");
+    arrivalSignalLength = registerSignal("arrivalLength");
 }
 
 void Takeoff::handleMessage(cMessage *msg)
@@ -44,6 +48,8 @@ void Takeoff::handleMessage(cMessage *msg)
              obj_plane = takeoff_queue.pop();
              plane = dynamic_cast<Plane*>(obj_plane);
              send(plane, "out_airstrip");
+             emit(arrivalSignalLength, takeoff_queue.getLength());
+             emit(arrivalSignalId, plane->getId());
          }
 
          else
@@ -59,6 +65,9 @@ void Takeoff::handleMessage(cMessage *msg)
          myMsg->setEnter(simTime());        //segno a che ore entra nella lista takeoff_queue
          myMsg->setKind(1);                 //setto per sicurezza, verrà tolto dopo i dovuti controlli
          takeoff_queue.insert(myMsg);
+
+         //emissione segnale contenente lunghezza coda
+         emit(arrivalSignalLength, takeoff_queue.getLength());
 
          EV << "TAKEOFF: PRINTING TAKE-OFF QUEUE:\n";
          for(cQueue::Iterator iter(takeoff_queue,0); !iter.end(); iter++)

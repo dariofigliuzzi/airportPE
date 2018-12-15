@@ -26,6 +26,8 @@ Plane* plane;    //Plane* in cui memorizzare le info aereo proveniente da Takeof
 void Airstrip::initialize()
 {
     free_strip = true;
+
+    //arrivalSignalId = registerSignal("arrivalId");
 }
 
 void Airstrip::handleMessage(cMessage *msg)
@@ -67,6 +69,7 @@ void Airstrip::handleMessage(cMessage *msg)
         beep = new cMessage("beep_takeoff");
         timerp = par("procTime3");
         scheduleAt(simTime() + timerp, beep);
+        //emit(arrivalSignalId, plane->getId());
 
     }
 

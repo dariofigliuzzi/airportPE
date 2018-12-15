@@ -23,6 +23,12 @@ simple Takeoff
 {
     parameters:
         bool sendInitialMessage = default(false);
+        
+        @signal[arrivalId](type="long");
+        @signal[arrivalLength](type="long");
+        @statistic[TakeoffRecId](title="ID"; source="arrivalId"; record=vector);
+        @statistic[TakeoffRecLength](title="TAKEOFF QUEUE LENGTH"; source="arrivalLength"; record=vector);
+        
     gates:
         input in_parking;
         output out_parking;

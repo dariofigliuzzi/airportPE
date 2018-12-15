@@ -31,6 +31,10 @@ class Parking : public cSimpleModule
   private:
     cMessage *beep;
     Plane* plane;
+
+    simsignal_t arrivalSignalId;
+    simsignal_t arrivalSignalLength;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
