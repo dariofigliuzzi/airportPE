@@ -22,8 +22,8 @@ void Sky::initialize()
     count_s = 0;                    //contatore aerei
     beep = new cMessage("beep");    //per creazione periodica aerei
     plane =nullptr;                 //cMessage con info su aereo
-    //timer = par("procTime");
-    timer = rand() % 10 + 25;
+    timer = par("procTime");
+    //timer = rand() % 10 + 25;
     scheduleAt(simTime() + timer, beep);
 
     arrivalSignalId = registerSignal("arrivalId");
