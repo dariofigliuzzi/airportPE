@@ -17,6 +17,7 @@
 #define __AIRPORT_TCX_H
 
 #include <omnetpp.h>
+#include "Plane_m.h"
 
 using namespace omnetpp;
 
@@ -34,6 +35,8 @@ private:
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual Plane* get_info(Plane* p);
+    virtual void manage_planes();
 };
 
 }; // namespace

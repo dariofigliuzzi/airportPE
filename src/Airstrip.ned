@@ -24,14 +24,11 @@ simple Airstrip
 {
     parameters:
 
-        bool sendInitialMessage = default(false);
-        double procTime2 @unit(s) = default(15s); //tempo per atterrare
-        double procTime3 @unit(s) = default(25s); //tempo per decollare
+        bool sendInitialMessage = default(false); 
+        double procTimeLanding @unit(s); //tempo per atterrare
+        double procTimeTakeoff @unit(s); //tempo per decollare
                
     gates:
-
-        input in_tower;
-        output out_tower;
         
         input in_landing;
         output out_landing;

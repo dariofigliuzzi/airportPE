@@ -14,22 +14,26 @@
 #include "Plane_m.h"
 
 
+
 namespace airport {
 
 Define_Module(Takeoff);
 
 cQueue takeoff_queue("takeoff_queue");
-
+simtime_t forTakeoff;
+simtime_t takeoff_wt;
 
 void Takeoff::initialize()
 {
     takeoff_queue.clear();
     plane = nullptr;
-    notify = nullptr;
     beep = nullptr;
+    forTakeoff = par("procTime");
 
-    arrivalSignalId = registerSignal("arrivalId");
+    arrivalSignalWaitingT = registerSignal("arrivalWaitingT");
     arrivalSignalLength = registerSignal("arrivalLength");
+
+    takeoff_wt = 0;
 }
 
 void Takeoff::handleMessage(cMessage *msg)
@@ -45,11 +49,13 @@ void Takeoff::handleMessage(cMessage *msg)
         {
              EV << "TAKEOFF: Start Take-off\n";
              cObject* obj_plane;
-             obj_plane = takeoff_queue.pop();
+             obj_plane = takeoff_queue.front();
              plane = dynamic_cast<Plane*>(obj_plane);
-             send(plane, "out_airstrip");
+             takeoff_queue.remove(obj_plane);
+
+             //emissione segnale contenente TakeoffWaitingTime
+             emit(arrivalSignalWaitingT,(simTime() - plane->getEnter()));
              emit(arrivalSignalLength, takeoff_queue.getLength());
-             emit(arrivalSignalId, plane->getId());
          }
 
          else
@@ -76,8 +82,8 @@ void Takeoff::handleMessage(cMessage *msg)
             EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() <<"\n";
          }
 
-         EV << "TAKEOFF A TOWER: mando a torre info sull'aereo appena arrivato\n";
-         send(get_info(myMsg), "out_tower");
+        // EV << "TAKEOFF A TOWER: mando a torre info sull'aereo appena arrivato\n";
+         send(get_info(myMsg), "out_airstrip");
      }
 }
 
@@ -90,5 +96,6 @@ Plane* Takeoff::get_info(Plane* p) {
     plane->setKind(p->getKind());
     return plane;
 }
+
 
 }; // namespace

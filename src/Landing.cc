@@ -11,22 +11,29 @@
 #include "Landing.h"
 #include "Plane_m.h"
 
-
 namespace airport {
 
 Define_Module(Landing);
 
 cQueue landing_queue("landing_queue");
-simtime_t timerl;
+simtime_t landing_wt;
+simtime_t timer_l;
+int count_sky;
 
 void Landing::initialize()
 {
-    landing_queue.clear();
+   //-----Sky implementation---
+   timer_l = par("skyTimer");
+   count_sky = 0;
+   beep = new cMessage("beep");
+   scheduleAt(simTime() + timer_l, beep);
+   //--------------------------
+   landing_queue.clear();
    plane = nullptr;
-   notify = nullptr;
    beep = nullptr;
-   arrivalSignalId = registerSignal("arrivalId");
    arrivalSignalLength = registerSignal("arrivalLength");
+   arrivalSignalWaiting = registerSignal("arrivalWaiting");
+   landing_wt = 0;
 }
 
 void Landing::handleMessage(cMessage *msg)
@@ -42,13 +49,13 @@ void Landing::handleMessage(cMessage *msg)
         {
             EV << "LANDING: Start Landing\n";
             cObject* obj_plane;
-            obj_plane = landing_queue.pop();
+            obj_plane = landing_queue.front();
             plane = dynamic_cast<Plane*>(obj_plane);
-            send(plane, "out_airstrip");
+            landing_queue.remove(obj_plane);
 
-            //emissione segnale contenente id aereo
+            //emissione segnale contenente lunghezza coda
             emit(arrivalSignalLength, landing_queue.getLength());
-            emit(arrivalSignalId, plane->getId());
+            emit(arrivalSignalWaiting, (simTime() - plane->getEnter()));
         }
 
         else EV<< "LANDING: The landing_queue is empty\n";
@@ -56,16 +63,16 @@ void Landing::handleMessage(cMessage *msg)
 
 
     //Gestione dei messaggi Plane* da sky
-    else if(myMsg)
+    else if(strcmp(msg->getName(), "beep") == 0)
     {
+        myMsg = plane_creation(count_sky);
         EV << "LANDING: Aereo aggiunto alla landing_queue\n";
-
-        myMsg->setEnter(simTime());     //segno a che ore entra nella lista landing_queue
-        myMsg->setKind(0);              //setto per sicurezza
         landing_queue.insert(myMsg);
 
         //emissione segnale con numero di aereo nella coda Landing
         emit(arrivalSignalLength, landing_queue.getLength());
+
+        send(get_info(myMsg), "out_airstrip");
 
         EV << "LANDING: PRINTING LANDING QUEUE:\n";
 
@@ -75,9 +82,9 @@ void Landing::handleMessage(cMessage *msg)
             EV <<"- ID:" <<myMsg->getId() << "  ENTRY(s):" << myMsg->getEnter() <<"\n";
         }
 
-
-        EV << "LANDING A TOWER: mando a torre info sull'aereo appena arrivato\n";
-        send(get_info(myMsg), "out_tower");
+        beep = new cMessage("beep");
+        scheduleAt(simTime() + timer_l, beep);
+        count_sky++;
     }
 }
 
@@ -90,5 +97,16 @@ Plane* Landing::get_info(Plane* p) {
     plane->setKind(p->getKind());
     return plane;
 }
+
+Plane* Landing::plane_creation(int n)
+{
+    Plane* plane;
+    plane = new Plane(nullptr);
+    plane->setId(n);
+    plane->setEnter(simTime());
+    plane->setKind(0);
+    return plane;
+}
+
 
 };

@@ -29,15 +29,16 @@ namespace airport {
 class Landing : public cSimpleModule
 {
   private:
-    cMessage *beep, *notify;
+    cMessage *beep;
     Plane *plane;
-    simsignal_t arrivalSignalId;
     simsignal_t arrivalSignalLength;
+    simsignal_t arrivalSignalWaiting;
 
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
     virtual Plane* get_info(Plane* p);
+    virtual Plane* plane_creation(int n);
 };
 
 }; // namespace

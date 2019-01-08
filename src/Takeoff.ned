@@ -23,10 +23,11 @@ simple Takeoff
 {
     parameters:
         bool sendInitialMessage = default(false);
+        double procTime @unit(s); //tempo per decollare
         
-        @signal[arrivalId](type="long");
+        @signal[arrivalWaitingT](type="simtime_t");
         @signal[arrivalLength](type="long");
-        @statistic[TakeoffRecId](title="ID"; source="arrivalId"; record=vector);
+        @statistic[TakeoffRecWaiting](title="TAKEOFF WT"; source="arrivalWaitingT"; record=mean);
         @statistic[TakeoffRecLength](title="TAKEOFF QUEUE LENGTH"; source="arrivalLength"; record=vector);
         
     gates:
@@ -35,7 +36,5 @@ simple Takeoff
         
         input in_airstrip;
         output out_airstrip;
-        
-        input in_tower;
-        output out_tower;
+
 }

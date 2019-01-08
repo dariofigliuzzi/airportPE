@@ -30,14 +30,7 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = \
-    $O/Airstrip.o \
-    $O/Landing.o \
-    $O/Parking.o \
-    $O/Sky.o \
-    $O/Takeoff.o \
-    $O/Tower.o \
-    $O/Plane_m.o
+OBJS = $O/Airstrip.o $O/Landing.o $O/Parking.o $O/Takeoff.o $O/Plane_m.o
 
 # Message files
 MSGFILES = \

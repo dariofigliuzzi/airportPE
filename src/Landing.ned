@@ -22,18 +22,15 @@ package airport;
 simple Landing
 {
     parameters:
-        bool sendInitialMessage = default(false);
-        //double procTime @unit(s) = default(3s);
-        @signal[arrivalId](type="long");
+        bool sendInitialMessage = default(true);
+        double skyTimer @unit(s);
         @signal[arrivalLength](type="long");
-        @statistic[LandingRecId](title="ID"; source="arrivalId"; record=vector);
+        @signal[arrivalWaiting](type="simtime_t");
+        @statistic[LandingRecWaiting](title="LANDING WT"; source="arrivalWaiting"; record=mean);
         @statistic[LandingRecLength](title="LANDING QUEUE LENGTH"; source="arrivalLength"; record=vector);
         
     gates:
-        input in_sky;
-        input in_tower;
-        output out_tower;
-        
+              
         input in_airstrip;
         output out_airstrip;
 }

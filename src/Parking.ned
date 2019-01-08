@@ -23,11 +23,11 @@ simple Parking
 {
     parameters:
         bool sendInitialMessage = default(false);
-        double procTime @unit(s) = default(240s); //tempo in cui rimane parcheggiato
+        //double procTime @unit(s) = default(320s); //tempo in cui rimane parcheggiato
+        double procTime @unit(s); //tempo in cui rimane parcheggiato
         @signal[arrivalLength](type="long");
-        @signal[arrivalId](type="long");
-        @statistic[ParkingRecId](title="ID"; source="arrivalId"; record=vector);
         @statistic[ParkingRecLength](title="PARKING QUEUE LENGTH"; source="arrivalLength"; record=vector);
+        
     gates:
         input in_airstrip;
         output out_airstrip;

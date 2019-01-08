@@ -15,29 +15,17 @@
 
 package airport.simulations;
 
-import airport.Tower;
-import airport.Sky;
 import airport.Parking;
 import airport.Airstrip;
 import airport.Landing;
 import airport.Takeoff;
 
-//
-// Two instances (tic and toc) of Txc connected.
-//
 
 network Airport
 {
-    @display("bgb=338,641");
+    @display("bgb=341.85,483.75");
     submodules:
 
-        tower: Tower {
-            @display("p=265,417");
-        }
-        sky: Sky {
-            //procTime = 5s;
-            @display("p=168,579");
-        }
         parking: Parking {
             @display("p=168,87");
         }
@@ -53,27 +41,17 @@ network Airport
         }
     connections:
 
-        sky.out --> {  delay = 0ms; } --> landing.in_sky;
-
-        landing.out_tower --> {  delay = 0ms; } --> tower.in_land;
-        landing.in_tower <-- {  delay = 0ms; } <-- tower.out_land;
-
         landing.out_airstrip --> {  delay = 0ms; } --> airstrip.in_landing;
         landing.in_airstrip <-- {  delay = 0ms; } <-- airstrip.out_landing;
 
         airstrip.out_parking --> {  delay = 0ms; } --> parking.in_airstrip;
         airstrip.in_parking <-- {  delay = 0ms; } <-- parking.out_airstrip;
 
-        airstrip.out_tower --> {  delay = 0ms; } --> tower.in_airstrip;
-        airstrip.in_tower <-- {  delay = 0ms; } <-- tower.out_airstrip;
 
         takeoff.out_parking --> {  delay = 0ms; } --> parking.in_takeoff;
         takeoff.in_parking <-- {  delay = 0ms; } <-- parking.out_takeoff;
 
         takeoff.out_airstrip --> {  delay = 0ms; } --> airstrip.in_takeoff;
         takeoff.in_airstrip <-- {  delay = 0ms; } <-- airstrip.out_takeoff;
-
-        takeoff.out_tower --> {  delay = 0ms; } --> tower.in_takeoff;
-        takeoff.in_tower <-- {  delay = 0ms; } <-- tower.out_takeoff;
 
 }

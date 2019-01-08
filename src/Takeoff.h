@@ -30,10 +30,9 @@ class Takeoff : public cSimpleModule
 {
   private:
     cMessage *beep;
-    cMessage* notify;
     Plane *plane;
 
-    simsignal_t arrivalSignalId;
+    simsignal_t arrivalSignalWaitingT;
     simsignal_t arrivalSignalLength;
 
   protected:
