@@ -23,6 +23,7 @@ cQueue takeoff_queue("takeoff_queue");
 simtime_t forTakeoff;
 simtime_t takeoff_wt;
 
+
 void Takeoff::initialize()
 {
     takeoff_queue.clear();
