@@ -20,7 +20,6 @@ namespace airport {
 Define_Module(Takeoff); //cacca
 
 cQueue takeoff_queue("takeoff_queue");
-simtime_t forTakeoff;
 simtime_t takeoff_wt;
 
 
@@ -29,7 +28,6 @@ void Takeoff::initialize()
     takeoff_queue.clear();
     plane = nullptr;
     beep = nullptr;
-    forTakeoff = par("procTime");
 
     arrivalSignalWaitingT = registerSignal("arrivalWaitingT");
     arrivalSignalLength = registerSignal("arrivalLength");

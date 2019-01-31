@@ -23,10 +23,10 @@ simple Takeoff
 {
     parameters:
         bool sendInitialMessage = default(false);
-        double procTime @unit(s); //tempo per decollare
         
         @signal[arrivalWaitingT](type="simtime_t");
         @signal[arrivalLength](type="long");
+        //@statistic[TakeoffRecWaiting](title="TAKEOFF WT"; source="arrivalWaitingT"; record=vector);
         @statistic[TakeoffRecWaiting](title="TAKEOFF WT"; source="arrivalWaitingT"; record=mean);
         @statistic[TakeoffRecLength](title="TAKEOFF QUEUE LENGTH"; source="arrivalLength"; record=vector);
         

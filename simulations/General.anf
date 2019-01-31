@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scave:Analysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:scave="http://www.omnetpp.org/omnetpp/scave">
-  <inputs>
-    <inputs name="/Airport/simulations/results/General-#0.vec"/>
-  </inputs>
-  <datasets/>
-  <chartSheets/>
+<scave:Analysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:scave="http://www.omnetpp.org/omnetpp/scave">
+  <inputs/>
+  <datasets>
+    <datasets name="parking_delay">
+      <items xsi:type="scave:Add" filterPattern="file(/airportPE/simulations/results/General-#0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(Airport.parking) AND name(ParkingRecLength:vector)" type="VECTOR"/>
+    </datasets>
+    <datasets name="waiting_times">
+      <items xsi:type="scave:Add" filterPattern="file(/airportPE/simulations/results/General-15,25,350-#0.sca) AND attr:configname(General) AND attr:runnumber(3) AND module(Airport.landing) AND name(LandingRecWaiting:mean)"/>
+      <items xsi:type="scave:Add" filterPattern="file(/airportPE/simulations/results/General-15,15,350-#0.sca) AND attr:configname(General) AND attr:runnumber(1) AND module(Airport.landing) AND name(LandingRecWaiting:mean)"/>
+      <items xsi:type="scave:Add" filterPattern="file(/airportPE/simulations/results/General-15,25,300-#0.sca) AND attr:configname(General) AND attr:runnumber(2) AND module(Airport.landing) AND name(LandingRecWaiting:mean)"/>
+      <items xsi:type="scave:Add" filterPattern="file(/airportPE/simulations/results/General-15,15,300-#0.sca) AND attr:configname(General) AND attr:runnumber(0) AND module(Airport.landing) AND name(LandingRecWaiting:mean)"/>
+    </datasets>
+  </datasets>
+  <chartSheets>
+    <chartSheets name="default"/>
+  </chartSheets>
 </scave:Analysis>

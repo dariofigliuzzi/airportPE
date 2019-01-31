@@ -26,6 +26,7 @@ simple Landing
         double skyTimer @unit(s);
         @signal[arrivalLength](type="long");
         @signal[arrivalWaiting](type="simtime_t");
+        //@statistic[LandingRecWaiting](title="LANDING WT"; source="arrivalWaiting"; record=vector);
         @statistic[LandingRecWaiting](title="LANDING WT"; source="arrivalWaiting"; record=mean);
         @statistic[LandingRecLength](title="LANDING QUEUE LENGTH"; source="arrivalLength"; record=vector);
         
