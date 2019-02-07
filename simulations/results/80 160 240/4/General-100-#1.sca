@@ -1,0 +1,29 @@
+version 2
+run General-1-20190206-15:59:36-14780
+attr configname General
+attr datetime 20190206-15:59:36
+attr experiment General
+attr inifile 4.ini
+attr iterationvars $0=100
+attr iterationvarsf 100-
+attr measurement $0=100
+attr network Airport
+attr processid 14780
+attr repetition 1
+attr replication #1
+attr resultdir results
+attr runnumber 1
+attr seedset 1
+param **.landing.sendInitialMessage true
+param **.landing.skyTimer 100s
+param **.airstrip.procTimeLanding exponential(20s)
+param **.airstrip.procTimeTakeoff exponential(20s)
+param **.parking.procTime exponential(300s)
+
+scalar Airport.landing LandingRecWaiting:mean 13891.606468071
+attr source arrivalWaiting
+attr title "LANDING WT, mean"
+scalar Airport.takeoff TakeoffRecWaiting:mean 13940.584678596
+attr source arrivalWaitingT
+attr title "TAKEOFF WT, mean"
+
